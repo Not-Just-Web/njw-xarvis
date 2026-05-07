@@ -32,7 +32,7 @@ jobs:
           cache: yarn
 
       - name: Install dependencies (root + connector-api)
-        run: yarn install --immutable-if-present && cd connector-api && npm ci
+        run: yarn install && cd connector-api && npm ci
 
       - name: Type check (extension + connector-api)
         run: yarn typecheck:all

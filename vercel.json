@@ -1,37 +1,17 @@
 {
-  "buildCommand": "npm run build:api",
+  "buildCommand": "cd connector-api && npm install && npm run build",
   "outputDirectory": "connector-api/dist",
-  "installCommand": "npm ci && cd connector-api && npm ci",
+  "installCommand": "yarn install && cd connector-api && npm ci",
   "env": {
     "NODE_ENV": "production",
-    "PORT": "3001",
     "JWT_SECRET": "@jwt_secret",
     "ALLOWED_ORIGINS": "chrome-extension://*,moz-extension://*"
   },
-  "envPrefix": "VITE_",
   "functions": {
-    "connector-api/src/index.ts": {
+    "api/**/*.js": {
       "runtime": "nodejs20.x",
       "memory": 1024,
       "maxDuration": 60
     }
-  },
-  "routes": [
-    {
-      "src": "/api/health",
-      "dest": "connector-api/src/index.ts"
-    },
-    {
-      "src": "/api/auth/(.*)",
-      "dest": "connector-api/src/index.ts"
-    },
-    {
-      "src": "/api/provider/(.*)",
-      "dest": "connector-api/src/index.ts"
-    },
-    {
-      "src": "/(.*)",
-      "status": 404
-    }
-  ]
+  }
 }
