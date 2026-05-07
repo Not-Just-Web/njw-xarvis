@@ -42,26 +42,79 @@ A cross-browser AI extension for Chrome, Firefox, and Brave that lets you chat w
 - Context chips and capture controls are kept near the composer for fast testing loops.
 
 Wireframes are maintained in docs for cleaner README landing:
+- [Wireframe Guide](docs/WIREFRAMES.md)
+- [Hero Preview](docs/assets/sidepanel-hero.svg)
 - [Sidepanel Wireframe](docs/assets/wireframe-sidepanel.svg)
 - [Context Capture Wireframe](docs/assets/wireframe-context-capture.svg)
 - [UAT QA Wireframe](docs/assets/wireframe-uat-qa.svg)
 
 ## Workflow Overview
+
+### What Users Can Do
+- Open AI chat from popup or right-click menu without leaving the current page.
+- Send context instantly from the browser:
+  - Selected text
+  - Selected element snapshot
+  - Current page URL
+  - Screenshot or pasted/dropped image
+- Use slash skills to speed up common tasks:
+  - /screenshot
+  - /select-element
+  - /test-section
+  - /test-feature
+- Switch providers per workflow (Gemini, Claude, ChatGPT, and future custom providers).
+- Keep work organized with sessions:
+  - Start new chat
+  - Resume previous chat
+  - Review per-session context timeline
+
+### How It Works
+1. User starts from popup or browser context menu.
+2. Extension opens sidepanel and preloads context when launched from quick actions.
+3. User can add/remove context chips before sending.
+4. Background service normalizes the request payload.
+5. Active provider adapter sends request to selected AI backend.
+6. Response streams back into sidepanel chat UI.
+7. Chat and context events are persisted in session history for resume/replay.
+
 ```mermaid
-flowchart LR
-    A[User in Browser Tab] --> B[Right Click or Extension Popup]
-    B --> C[Open Sidepanel Chat]
-    B --> D[Quick Send Context]
+flowchart TD
+    A[User Browsing Any Tab] --> B{Entry Point}
+    B --> B1[Extension Popup]
+    B --> B2[Right Click Context Menu]
+
+    B1 --> C[Open Sidepanel Chat]
+    B2 --> C
+    B2 --> D[Quick Send Selected Text or URL or Element]
     D --> C
-    C --> E[Background Router]
-    E --> F[Provider Adapter]
-    F --> G[Gemini]
-    F --> H[Claude]
-    F --> I[ChatGPT]
-    F --> J[Custom Provider]
-    E --> K[Session Store]
-    K --> C
-    C --> L[Context Timeline + Resume]
+
+    C --> E[Composer + Context Chips]
+    E --> E1[Enter Send]
+    E --> E2[Shift+Enter Newline]
+    E --> E3[Slash Skills]
+    E3 --> E31[/screenshot]
+    E3 --> E32[/select-element]
+    E3 --> E33[/test-section]
+    E3 --> E34[/test-feature]
+
+    E --> F[Background Request Router]
+    F --> G[Payload Normalizer]
+    G --> H{Selected Provider}
+
+    H --> H1[Gemini Adapter]
+    H --> H2[Claude Adapter]
+    H --> H3[ChatGPT Adapter]
+    H --> H4[Custom Adapter]
+
+    H1 --> I[AI Response Stream]
+    H2 --> I
+    H3 --> I
+    H4 --> I
+
+    I --> J[Sidepanel Message Render]
+    J --> K[Session Storage]
+    K --> L[Session List and Resume]
+    K --> M[Per-Session Context Timeline]
 ```
 
 ## Architecture at a Glance
@@ -76,6 +129,8 @@ Read detailed architecture:
 ## Development Plan
 - Master implementation checklist:
   - [docs/IMPLEMENTATION_CHECKLIST.md](docs/IMPLEMENTATION_CHECKLIST.md)
+- Phase execution map:
+  - [docs/PHASE_EXECUTION_PLAN.md](docs/PHASE_EXECUTION_PLAN.md)
 - Live status tracker:
   - [docs/PROGRESS.md](docs/PROGRESS.md)
 - Git and PR policy:
