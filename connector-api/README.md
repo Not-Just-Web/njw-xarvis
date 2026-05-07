@@ -1,6 +1,6 @@
-# AI Assistant Connector API
+# njw-xarvis Connector API
 
-Secure backend service for the AI Assistant Extension that handles:
+Secure backend service for njw-xarvis that handles:
 - Token exchange and JWT generation
 - Provider API key management
 - Proxying requests to AI providers (Gemini, Claude, ChatGPT)

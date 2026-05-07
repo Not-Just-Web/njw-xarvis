@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
-import { geminiAdapter } from '../extension/providers/gemini/adapter';
-import { claudeAdapter } from '../extension/providers/claude/adapter';
-import { chatgptAdapter } from '../extension/providers/chatgpt/adapter';
+import { geminiAdapter } from '@ai/extension/providers/gemini/adapter';
+import { claudeAdapter } from '@ai/extension/providers/claude/adapter';
+import { chatgptAdapter } from '@ai/extension/providers/chatgpt/adapter';
 
 describe('Provider Adapters', () => {
   afterEach(() => {

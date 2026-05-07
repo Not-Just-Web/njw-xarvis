@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { isRuntimeMessage } from '../shared/types/runtime-messages';
+import { isRuntimeMessage } from '@ai/shared/types/runtime-messages';
 import type {
   SetActiveProviderMessage,
   GetActiveProviderMessage,
   SendChatMessage,
   HealthCheckMessage
-} from '../shared/types/runtime-messages';
+} from '@ai/shared/types/runtime-messages';
 
 describe('Runtime Messages', () => {
   describe('isRuntimeMessage type guard', () => {

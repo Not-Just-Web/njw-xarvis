@@ -9,6 +9,11 @@ const rootDir = fileURLToPath(new URL('.', import.meta.url));
 const outDir = path.resolve(rootDir, 'dist', target);
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@ai': rootDir
+    }
+  },
   define: {
     // Pass environment variables to extension
     'process.env.VITE_CONNECTOR_API_URL': JSON.stringify(

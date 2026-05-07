@@ -11,13 +11,20 @@
     "noImplicitAny": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@ai/*": ["./*"]
+    }
   },
   "include": [
     "extension/**/*.ts",
     "extension/**/*.tsx",
     "shared/**/*.ts",
     "tests/**/*.ts",
+    "tests/**/*.tsx",
     "vite.config.ts"
+  ],
+  "exclude": [
+    "vitest.config.ts"
   ]
 }

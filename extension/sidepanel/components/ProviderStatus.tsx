@@ -15,7 +15,7 @@ interface ProviderStatusProps {
 }
 
 export const ProviderStatus: React.FC<ProviderStatusProps> = ({
-  providerId,
+  providerId: _providerId,
   displayName,
   status,
   errorMessage,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { defaultSkills, isDefaultSkill } from '../extension/shared/skills';
+import { defaultSkills, isDefaultSkill } from '@ai/extension/shared/skills';
 
 describe('Skills', () => {
   describe('defaultSkills', () => {

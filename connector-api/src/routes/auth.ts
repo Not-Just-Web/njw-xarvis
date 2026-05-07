@@ -1,5 +1,10 @@
 import { Router, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+
+interface ProviderCredentials {
+  apiKey?: string;
+  [key: string]: string | undefined;
+}
 
 const router = Router();
 const SECRET_KEY = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
@@ -47,9 +52,11 @@ router.post('/token', async (req: Request, res: Response) => {
       provider: providerId,
       message: 'Token granted successfully'
     });
+    return;
   } catch (error) {
     console.error(`[${req.id}] Auth token error:`, error);
     res.status(500).json({ error: 'Failed to generate token' });
+    return;
   }
 });
 
@@ -67,15 +74,17 @@ router.post('/validate', (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Token required' });
     }
 
-    const decoded = jwt.verify(token, SECRET_KEY) as any;
+    const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload;
 
-    if (decoded.extensionId !== extensionId || decoded.providerId !== providerId) {
+    if (decoded['extensionId'] !== extensionId || decoded['providerId'] !== providerId) {
       return res.status(401).json({ valid: false, error: 'Token mismatch' });
     }
 
     res.json({ valid: true, provider: providerId, message: 'Token is valid' });
-  } catch (error) {
+    return;
+  } catch {
     res.status(401).json({ valid: false, error: 'Invalid token' });
+    return;
   }
 });
 
@@ -93,9 +102,9 @@ router.post('/refresh', (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Token required' });
     }
 
-    const decoded = jwt.verify(token, SECRET_KEY) as any;
+    const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload;
 
-    if (decoded.extensionId !== extensionId || decoded.providerId !== providerId) {
+    if (decoded['extensionId'] !== extensionId || decoded['providerId'] !== providerId) {
       return res.status(401).json({ error: 'Token mismatch' });
     }
 
@@ -111,8 +120,10 @@ router.post('/refresh', (req: Request, res: Response) => {
       provider: providerId,
       message: 'Token refreshed successfully'
     });
-  } catch (error) {
+    return;
+  } catch {
     res.status(401).json({ error: 'Failed to refresh token' });
+    return;
   }
 });
 
@@ -135,16 +146,18 @@ router.post('/revoke', (req: Request, res: Response) => {
     }
 
     res.json({ revoked: true, provider: providerId, message: 'Token revoked successfully' });
+    return;
   } catch (error) {
     console.error(`[${req.id}] Revoke error:`, error);
     res.status(500).json({ error: 'Failed to revoke token' });
+    return;
   }
 });
 
 /**
  * Validate provider credentials by testing against actual API
  */
-async function validateProviderCredentials(providerId: string, credentials: any): Promise<boolean> {
+async function validateProviderCredentials(providerId: string, credentials: ProviderCredentials): Promise<boolean> {
   try {
     switch (providerId) {
       case 'gemini':

@@ -1,0 +1,14 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Run linting
+echo "📝 Linting code..."
+yarn lint:all || exit 1
+
+# Run typecheck
+echo "✓ Typecheck..."
+yarn typecheck:all || exit 1
+
+echo "✅ Pre-commit checks passed!"

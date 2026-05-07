@@ -1,4 +1,22 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
+interface AuthenticatedRequest extends Request {
+  extensionId?: string;
+  providerId?: string;
+}
+
+interface MessagePayload {
+  model?: string;
+  messages: Array<{ role: string; content: string }>;
+  maxTokens?: number;
+  [key: string]: unknown;
+}
+
+interface ProviderResponse {
+  text: string;
+  model: string;
+  provider: string;
+}
+
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
@@ -11,20 +29,21 @@ const providerKeys = new Map<string, Map<string, string>>();
 /**
  * Middleware: Verify JWT token and extract provider info
  */
-function verifyToken(req: Request, res: Response, next: Function) {
+function verifyToken(req: Request, res: Response, next: NextFunction): void {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'Missing or invalid authorization header' });
+      res.status(401).json({ error: 'Missing or invalid authorization header' });
+      return;
     }
 
     const token = authHeader.substring(7);
-    const decoded = jwt.verify(token, SECRET_KEY) as any;
+    const decoded = jwt.verify(token, SECRET_KEY) as { extensionId: string; providerId: string };
 
-    (req as any).extensionId = decoded.extensionId;
-    (req as any).providerId = decoded.providerId;
+    (req as AuthenticatedRequest).extensionId = decoded.extensionId;
+    (req as AuthenticatedRequest).providerId = decoded.providerId;
     next();
-  } catch (error) {
+  } catch {
     res.status(401).json({ error: 'Invalid or expired token' });
   }
 }
@@ -37,9 +56,9 @@ function verifyToken(req: Request, res: Response, next: Function) {
  */
 router.post('/message', verifyToken, async (req: Request, res: Response) => {
   try {
-    const extensionId = (req as any).extensionId;
-    const providerId = (req as any).providerId;
-    const payload = req.body;
+    const extensionId = (req as AuthenticatedRequest).extensionId ?? '';
+    const providerId = (req as AuthenticatedRequest).providerId ?? '';
+    const payload = req.body as MessagePayload;
 
     // Get API key for this provider (stored during token exchange)
     const apiKey = getProviderApiKey(extensionId, providerId);
@@ -50,10 +69,12 @@ router.post('/message', verifyToken, async (req: Request, res: Response) => {
     // Proxy request to appropriate provider
     const response = await proxyToProvider(providerId, apiKey, payload);
     res.json(response);
-  } catch (error) {
-    console.error(`[${req.id}] Provider proxy error:`, error);
-    const errorMessage = error instanceof Error ? error.message : 'Provider request failed';
+    return;
+  } catch (err) {
+    console.error(`[${req.id}] Provider proxy error:`, err);
+    const errorMessage = err instanceof Error ? err.message : 'Provider request failed';
     res.status(500).json({ error: errorMessage });
+    return;
   }
 });
 
@@ -77,7 +98,7 @@ router.get('/health', async (req: Request, res: Response) => {
       providers: health,
       message: 'Use /provider/:providerId/health for provider-specific status'
     });
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Health check failed' });
   }
 });
@@ -89,6 +110,10 @@ router.get('/health', async (req: Request, res: Response) => {
 router.get('/:providerId/health', async (req: Request, res: Response) => {
   try {
     const { providerId } = req.params;
+    if (!providerId) {
+      res.status(400).json({ error: 'providerId is required' });
+      return;
+    }
     const isHealthy = await checkProviderHealth(providerId);
 
     res.json({
@@ -96,7 +121,7 @@ router.get('/:providerId/health', async (req: Request, res: Response) => {
       status: isHealthy ? 'healthy' : 'unhealthy',
       timestamp: new Date().toISOString()
     });
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: `Failed to check ${req.params.providerId} health` });
   }
 });
@@ -104,7 +129,7 @@ router.get('/:providerId/health', async (req: Request, res: Response) => {
 /**
  * Proxy requests to the appropriate AI provider
  */
-async function proxyToProvider(providerId: string, apiKey: string, payload: any): Promise<any> {
+async function proxyToProvider(providerId: string, apiKey: string, payload: MessagePayload): Promise<ProviderResponse> {
   switch (providerId) {
     case 'gemini':
       return proxyGemini(apiKey, payload);
@@ -117,13 +142,13 @@ async function proxyToProvider(providerId: string, apiKey: string, payload: any)
   }
 }
 
-async function proxyGemini(apiKey: string, payload: any): Promise<any> {
+async function proxyGemini(apiKey: string, payload: MessagePayload): Promise<ProviderResponse> {
   const { model = 'gemini-2.0-flash', messages, ...options } = payload;
 
   const response = await axios.post(
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
     {
-      contents: messages.map((msg: any) => ({
+      contents: messages.map((msg) => ({
         role: msg.role === 'user' ? 'user' : 'model',
         parts: [{ text: msg.content }]
       })),
@@ -138,7 +163,7 @@ async function proxyGemini(apiKey: string, payload: any): Promise<any> {
   };
 }
 
-async function proxyClaud(apiKey: string, payload: any): Promise<any> {
+async function proxyClaud(apiKey: string, payload: MessagePayload): Promise<ProviderResponse> {
   const { model = 'claude-3-5-sonnet-20241022', messages, ...options } = payload;
 
   const response = await axios.post(
@@ -164,7 +189,7 @@ async function proxyClaud(apiKey: string, payload: any): Promise<any> {
   };
 }
 
-async function proxyChatGpt(apiKey: string, payload: any): Promise<any> {
+async function proxyChatGpt(apiKey: string, payload: MessagePayload): Promise<ProviderResponse> {
   const { model = 'gpt-4o', messages, ...options } = payload;
 
   const response = await axios.post(
@@ -193,7 +218,7 @@ async function checkProviderHealth(providerId: string): Promise<boolean> {
     // In production: check provider status endpoint
     // For now: consider all providers healthy if they have endpoints
     return ['gemini', 'claude', 'chatgpt'].includes(providerId);
-  } catch (error) {
+  } catch {
     return false;
   }
 }

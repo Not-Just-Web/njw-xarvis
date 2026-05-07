@@ -1,0 +1,10 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🚀 Running pre-push validation..."
+
+# Run full validation suite
+echo "🔍 Running comprehensive validation..."
+yarn validate:all || exit 1
+
+echo "✅ All checks passed! Ready to push."
