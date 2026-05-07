@@ -22,9 +22,10 @@ declare global {
 }
 
 export const CONNECTOR_API_CONFIG = {
-  // Production: Uses /api relative path on Vercel
-  // Development: Uses http://localhost:3001
-  baseUrl: process.env.VITE_CONNECTOR_API_URL || '/api',
+  // Default behavior:
+  // - Local development: http://localhost:3001 (set via VITE_CONNECTOR_API_URL)
+  // - Build/production: https://njw-xarvis.vercel.app/api
+  baseUrl: process.env.VITE_CONNECTOR_API_URL || 'https://njw-xarvis.vercel.app/api',
 
   // API endpoints
   endpoints: {
@@ -59,10 +60,6 @@ export const CONNECTOR_API_CONFIG = {
    * Get full API URL (handles relative paths on Vercel)
    */
   getFullUrl(path: string): string {
-    // If running in browser and baseUrl is relative, construct full URL
-    if (typeof window !== 'undefined' && this.baseUrl.startsWith('/')) {
-      return `${window.location.origin}${this.baseUrl}${path}`;
-    }
     return this.getUrl(path);
   },
 

@@ -15,6 +15,15 @@
     "default_title": "NJW Xarvis",
     "default_panel": "extension/sidepanel.html"
   },
+  "commands": {
+    "open-sidepanel": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "Open NJW Xarvis sidepanel"
+    }
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

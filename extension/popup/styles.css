@@ -30,6 +30,20 @@ body {
   padding: 14px;
 }
 
+.brand-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.brand-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 109, 119, 0.22);
+}
+
 .eyebrow {
   margin: 0;
   font-size: 11px;
@@ -39,7 +53,7 @@ body {
 }
 
 h1 {
-  margin: 4px 0 12px;
+  margin: 4px 0 0;
   font-size: 20px;
 }
 
@@ -58,6 +72,7 @@ label {
 }
 
 select,
+input,
 button {
   width: 100%;
   border-radius: 10px;
@@ -76,6 +91,21 @@ button {
 
 button:hover {
   background: linear-gradient(135deg, var(--primary-strong), #00858e);
+}
+
+button.secondary {
+  border: 1px solid var(--border);
+  background: #eef1fa;
+  color: #28304d;
+}
+
+button.secondary:hover {
+  background: #e3e8f7;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .status-row {

@@ -7,6 +7,8 @@ import react from '@vitejs/plugin-react';
 const target = process.env.TARGET === 'firefox' ? 'firefox' : 'chromium';
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
 const outDir = path.resolve(rootDir, 'dist', target);
+const connectorApiUrl =
+  process.env.VITE_CONNECTOR_API_URL || 'https://njw-xarvis.vercel.app/api';
 
 export default defineConfig({
   resolve: {
@@ -16,9 +18,7 @@ export default defineConfig({
   },
   define: {
     // Pass environment variables to extension
-    'process.env.VITE_CONNECTOR_API_URL': JSON.stringify(
-      process.env.VITE_CONNECTOR_API_URL || 'http://localhost:3001'
-    ),
+    'process.env.VITE_CONNECTOR_API_URL': JSON.stringify(connectorApiUrl),
     'process.env.VITE_TARGET': JSON.stringify(target)
   },
   build: {

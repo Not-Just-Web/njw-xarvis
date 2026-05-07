@@ -4,6 +4,9 @@ import type { ProviderId } from '../provider-contract/types';
 export type RuntimeMessageType =
   | 'provider.setActive'
   | 'provider.getActive'
+  | 'provider.connect'
+  | 'provider.disconnect'
+  | 'provider.getAuthStatus'
   | 'chat.send'
   | 'chat.healthCheck';
 
@@ -19,6 +22,28 @@ export type SetActiveProviderMessage = RuntimeMessageEnvelope<
 
 export type GetActiveProviderMessage = RuntimeMessageEnvelope<'provider.getActive', Record<string, never>>;
 
+export type ConnectProviderMessage = RuntimeMessageEnvelope<
+  'provider.connect',
+  {
+    providerId: ProviderId;
+    apiKey: string;
+  }
+>;
+
+export type DisconnectProviderMessage = RuntimeMessageEnvelope<
+  'provider.disconnect',
+  {
+    providerId: ProviderId;
+  }
+>;
+
+export type GetProviderAuthStatusMessage = RuntimeMessageEnvelope<
+  'provider.getAuthStatus',
+  {
+    providerId: ProviderId;
+  }
+>;
+
 export type SendChatMessage = RuntimeMessageEnvelope<
   'chat.send',
   {
@@ -33,6 +58,9 @@ export type HealthCheckMessage = RuntimeMessageEnvelope<'chat.healthCheck', { pi
 export type RuntimeMessage =
   | SetActiveProviderMessage
   | GetActiveProviderMessage
+  | ConnectProviderMessage
+  | DisconnectProviderMessage
+  | GetProviderAuthStatusMessage
   | SendChatMessage
   | HealthCheckMessage;
 

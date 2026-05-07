@@ -2,6 +2,7 @@ import type { ProviderId, ProviderSendPayload, ProviderSendResult, ProviderAuthC
 import { providerRegistry } from '../../shared/provider-contract/registry';
 
 let activeProviderId: ProviderId = 'gemini';
+const connectedProviders = new Set<ProviderId>();
 
 export const setActiveProvider = (providerId: ProviderId): ProviderId => {
   if (!providerRegistry.has(providerId)) {
@@ -27,7 +28,24 @@ export const listProviders = () => {
 
 export const setProviderAuth = async (providerId: ProviderId, config: ProviderAuthConfig): Promise<boolean> => {
   providerRegistry.setAuth(providerId, config);
-  return providerRegistry.authenticate(providerId);
+  const authenticated = await providerRegistry.authenticate(providerId);
+
+  if (authenticated) {
+    connectedProviders.add(providerId);
+  } else {
+    connectedProviders.delete(providerId);
+  }
+
+  return authenticated;
+};
+
+export const clearProviderAuth = (providerId: ProviderId): void => {
+  providerRegistry.setAuth(providerId, { token: '' });
+  connectedProviders.delete(providerId);
+};
+
+export const isProviderConnected = (providerId: ProviderId): boolean => {
+  return connectedProviders.has(providerId);
 };
 
 export const sendWithActiveProvider = async (

@@ -3,8 +3,8 @@ import CONNECTOR_API_CONFIG from '@ai/shared/connector-api/config';
 
 describe('connector-api config', () => {
   describe('baseUrl', () => {
-    it('defaults to /api when no env variable set', () => {
-      expect(CONNECTOR_API_CONFIG.baseUrl).toBe('/api');
+    it('defaults to Vercel /api when no env variable set', () => {
+      expect(CONNECTOR_API_CONFIG.baseUrl).toBe('https://njw-xarvis.vercel.app/api');
     });
   });
 
@@ -29,7 +29,7 @@ describe('connector-api config', () => {
   describe('getUrl', () => {
     it('concatenates baseUrl and path', () => {
       const url = CONNECTOR_API_CONFIG.getUrl('/auth/token');
-      expect(url).toBe('/api/auth/token');
+      expect(url).toBe('https://njw-xarvis.vercel.app/api/auth/token');
     });
   });
 

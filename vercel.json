@@ -9,7 +9,11 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/sidepanel.html"
+      "destination": "/extension/sidepanel.html"
+    },
+    {
+      "source": "/health",
+      "destination": "/api/health"
     }
   ]
 }
