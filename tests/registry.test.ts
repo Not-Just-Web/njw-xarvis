@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { providerRegistry } from '../shared/provider-contract/registry';
-import type { ProviderAdapter, ProviderId } from '../shared/provider-contract/types';
+import { providerRegistry } from '@ai/shared/provider-contract/registry';
+import type { ProviderAdapter, ProviderId } from '@ai/shared/provider-contract/types';
 
 describe('Provider Registry', () => {
   it('should list all registered providers', () => {

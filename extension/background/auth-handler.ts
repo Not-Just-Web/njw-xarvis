@@ -15,6 +15,11 @@ interface StoredAuth {
 // In-memory storage for tokens (replace with Chrome storage in production)
 const tokenStore = new Map<string, StoredAuth>();
 
+/** Clear all in-memory tokens – used in tests for isolation */
+export const clearAllTokens = (): void => {
+  tokenStore.clear();
+};
+
 /**
  * Exchange credentials for JWT token via connector API
  */

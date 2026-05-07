@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import CONNECTOR_API_CONFIG from '../../shared/connector-api/config';
+import CONNECTOR_API_CONFIG from '@ai/shared/connector-api/config';
 
 interface ProviderSetupProps {
   providerId: 'gemini' | 'claude' | 'chatgpt';

@@ -4,8 +4,8 @@
  */
 
 import { vi } from 'vitest';
-import type { ProviderSendPayload, ProviderSendResult, ChatMessageInput } from '../shared/provider-contract/types';
-import type { ChatSession, ContextEvent } from '../shared/chat-session/types';
+import type { ProviderSendPayload, ProviderSendResult, ChatMessageInput } from '@ai/shared/provider-contract/types';
+import type { ChatSession, ContextEvent } from '@ai/shared/chat-session/types';
 
 // Mock API responses
 export const mockProviderResponses = {

@@ -223,7 +223,7 @@ describe('Auth Routes', () => {
         });
 
       expect(response.status).toBe(401);
-      expect(response.body.error).toContain('Invalid or expired token');
+      expect(response.body.error).toContain('Failed to refresh token');
     });
 
     it('should return 401 if extensionId does not match', async () => {

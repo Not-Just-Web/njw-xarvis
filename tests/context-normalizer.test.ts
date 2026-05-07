@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { normalizeToContextEvent, sanitizePayload } from '../extension/background/context-normalizer';
-import type { CapturedContext } from '../extension/content-script/selection';
+import { normalizeToContextEvent, sanitizePayload } from '@ai/extension/background/context-normalizer';
+import type { CapturedContext } from '@ai/extension/content-script/selection';
 
 describe('Context Normalizer', () => {
   describe('normalizeToContextEvent', () => {
