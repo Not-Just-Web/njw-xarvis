@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { ProviderId } from '../../shared/provider-contract/types';
+import logoUrl from '../assets/njw-xarvis-logo.svg';
 
 const providers = [
   { id: 'gemini', label: 'Gemini' },
@@ -139,9 +140,12 @@ export function PopupApp(): JSX.Element {
 
   return (
     <main className="popup-shell">
-      <header>
-        <p className="eyebrow">NJW Xarvis</p>
-        <h1>Quick Launch</h1>
+      <header className="brand-header">
+        <img src={logoUrl} alt="NJW Xarvis logo" className="brand-logo" />
+        <div>
+          <p className="eyebrow">NJW Xarvis</p>
+          <h1>Quick Launch</h1>
+        </div>
       </header>
 
       <section className="panel">

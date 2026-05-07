@@ -4,6 +4,7 @@ import { addMessage, createSession, getMessages, listSessions } from '../../shar
 import type { ChatMessage, ChatSession } from '../../shared/chat-session/types';
 import type { CapturedContext } from '../content-script/selection';
 import type { ProviderId } from '../../shared/provider-contract/types';
+import logoUrl from '../assets/njw-xarvis-logo.svg';
 
 type ContextChip = CapturedContext & { id: string };
 
@@ -302,6 +303,7 @@ export function SidepanelApp(): JSX.Element {
             >
               ☰
             </button>
+            <img src={logoUrl} alt="NJW Xarvis logo" className="topbar-logo" />
             <div>
               <p className="eyebrow">NJW Xarvis</p>
               <h1>{activeSession?.title ?? 'Chat'}</h1>
