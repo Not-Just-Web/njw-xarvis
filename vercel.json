@@ -4,7 +4,6 @@
   "installCommand": "yarn install && cd connector-api && npm install",
   "env": {
     "NODE_ENV": "production",
-    "JWT_SECRET": "@jwt_secret",
     "ALLOWED_ORIGINS": "chrome-extension://*,moz-extension://*"
   },
   "functions": {
