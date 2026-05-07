@@ -61,7 +61,7 @@ declare global {
 
 if (!process.env.VERCEL) {
   app.listen(PORT, () => {
-    console.log(`🚀 AI Assistant Connector API running on http://localhost:${PORT}`);
+    console.log(`🚀 njw-xarvis Connector API running on http://localhost:${PORT}`);
     console.log(`📋 Health check: http://localhost:${PORT}/health`);
     console.log(`🔐 Allowed origins: ${process.env.ALLOWED_ORIGINS || 'chrome-extension://* (default)'}`);
   });

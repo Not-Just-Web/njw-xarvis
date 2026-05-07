@@ -1,7 +1,7 @@
 import { captureCurrentUrl, captureSelectedText } from './selection';
 import { startElementPicker } from './element-picker';
 
-console.debug('AI Assistant content script active');
+console.debug('njw-xarvis content script active');
 
 chrome.runtime.onMessage.addListener((message: unknown, _sender, sendResponse) => {
   if (!message || typeof message !== 'object') return false;

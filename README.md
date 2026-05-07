@@ -1,4 +1,4 @@
-# njw-xarvis: AI Assistant Browser Extension
+# njw-xarvis Browser Extension
 
 A cross-browser AI extension for Chrome, Firefox, and Brave that lets you chat with AI in a browser sidepanel using live page context.
 

@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "AI Assistant Extension",
+  "name": "njw-xarvis",
   "version": "0.2.0",
-  "description": "Sidepanel AI assistant with browser context capture.",
+  "description": "njw-xarvis: Sidepanel AI chat with browser context capture.",
   "permissions": ["storage", "activeTab", "scripting", "contextMenus", "tabs", "sidePanel"],
   "host_permissions": ["<all_urls>"],
   "action": {
-    "default_title": "AI Assistant",
+    "default_title": "njw-xarvis",
     "default_popup": "extension/popup.html"
   },
   "background": {
