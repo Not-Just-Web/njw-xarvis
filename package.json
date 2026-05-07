@@ -27,7 +27,8 @@
     "test:api": "cd connector-api && yarn test",
     "test:all": "yarn test && yarn test:api",
     "validate:all": "yarn typecheck:all && yarn lint:all && yarn test:all && yarn build:all",
-    "setup": "yarn install && cd connector-api && yarn install && cd .."
+    "setup": "yarn install && cd connector-api && yarn install && cd ..",
+    "prepare": "husky install"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -44,6 +45,7 @@
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "eslint": "^9.26.0",
+    "husky": "^9.1.7",
     "typescript": "^5.8.3",
     "vite": "^5.4.18",
     "vitest": "^3.1.3"
