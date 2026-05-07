@@ -1,0 +1,34 @@
+{
+  "name": "ai-assistant-extension",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Cross-browser AI assistant extension built with React and TypeScript",
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env TARGET=chromium vite build --watch",
+    "build:chromium": "cross-env TARGET=chromium vite build",
+    "build:firefox": "cross-env TARGET=firefox vite build",
+    "build": "npm run build:chromium && npm run build:firefox",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.315",
+    "@types/node": "^22.15.17",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.5",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "@vitejs/plugin-react": "^4.4.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.26.0",
+    "typescript": "^5.8.3",
+    "vite": "^5.4.18",
+    "vitest": "^3.1.3"
+  }
+}

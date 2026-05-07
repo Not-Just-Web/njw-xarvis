@@ -112,11 +112,11 @@ Phase 5: Extensibility
 - Add tests for provider contract compliance and payload normalization.
 
 ## Suggested Commands (when project is scaffolded)
-- Install: `npm install`
-- Dev build: `npm run dev`
-- Production build: `npm run build`
-- Test: `npm test`
-- Lint: `npm run lint`
+- Install: `yarn install`
+- Dev build: `yarn dev`
+- Production build: `yarn build`
+- Test: `yarn test`
+- Lint: `yarn lint`
 
 If command names differ after scaffolding, update this file immediately.
 

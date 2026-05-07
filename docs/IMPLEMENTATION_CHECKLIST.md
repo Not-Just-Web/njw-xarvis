@@ -37,10 +37,10 @@ Definition of done:
 
 ## Phase 0: Foundation and Tooling
 ### Chunk 0.1 Project scaffold
-- [ ] Initialize TypeScript WebExtensions workspace.
-- [ ] Add build targets for Chromium and Firefox.
-- [ ] Add lint, test, typecheck scripts.
-- [ ] Add CI workflow for lint + test + build.
+- [x] Initialize TypeScript WebExtensions workspace.
+- [x] Add build targets for Chromium and Firefox.
+- [x] Add lint, test, typecheck scripts.
+- [x] Add CI workflow for lint + test + build.
 
 Suggested files:
 - package.json
@@ -54,9 +54,9 @@ Definition of done:
 - CI green on default branch.
 
 ### Chunk 0.2 Shared contracts
-- [ ] Create provider contract types.
-- [ ] Create chat session and context event types.
-- [ ] Create background message envelope types.
+- [x] Create provider contract types.
+- [x] Create chat session and context event types.
+- [x] Create background message envelope types.
 
 Suggested files:
 - shared/provider-contract/types.ts
@@ -68,9 +68,9 @@ Definition of done:
 
 ## Phase 1: Core Runtime Wiring
 ### Chunk 1.1 Background orchestration
-- [ ] Implement message router in background.
-- [ ] Implement provider router registry.
-- [ ] Add health-check command path.
+- [x] Implement message router in background.
+- [x] Implement provider router registry.
+- [x] Add health-check command path.
 
 Suggested files:
 - extension/background/index.ts
@@ -83,8 +83,8 @@ Interfaces to implement:
 - sendWithActiveProvider(request)
 
 ### Chunk 1.2 Popup launcher
-- [ ] Build popup provider dropdown and status view.
-- [ ] Add open-sidepanel action.
+- [x] Build popup provider dropdown and status view.
+- [x] Add open-sidepanel action.
 
 Suggested files:
 - extension/popup/App.tsx

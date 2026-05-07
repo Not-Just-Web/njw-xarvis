@@ -50,14 +50,51 @@ flowchart TD
     N --> O[Resume and Context Timeline]
 ```
 
-## Use It
+## Quick Start
 ```bash
-npm install
-npm run dev
-npm run lint
-npm test
-npm run build
+git clone https://github.com/Not-Just-Web/ai-assistant-extension.git
+cd ai-assistant-extension
+yarn install
+yarn dev
+yarn lint
+yarn test
+yarn build
 ```
+
+## Bun Alternative
+```bash
+bun install
+bun run dev
+bun run lint
+bun run test
+bun run build
+```
+
+## Build Outputs
+- Chromium build folder: `dist/chromium`
+- Firefox build folder: `dist/firefox`
+
+## Import Extension in Browser
+### Chrome or Brave
+1. Open `chrome://extensions` (or `brave://extensions`).
+2. Enable Developer mode.
+3. Click Load unpacked.
+4. Select `dist/chromium`.
+
+### Firefox
+1. Open `about:debugging#/runtime/this-firefox`.
+2. Click Load Temporary Add-on.
+3. Select `dist/firefox/manifest.json`.
+
+## Build Process
+1. `yarn build:chromium` generates MV3 package in `dist/chromium`.
+2. `yarn build:firefox` generates Firefox package in `dist/firefox`.
+3. `yarn build` runs both targets.
+
+Using bun for the same commands:
+1. `bun run build:chromium`
+2. `bun run build:firefox`
+3. `bun run build`
 
 ## Docs
 - Architecture: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)

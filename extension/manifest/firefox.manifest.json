@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+  "name": "AI Assistant Extension",
+  "version": "0.2.0",
+  "description": "Sidepanel AI assistant with browser context capture.",
+  "permissions": ["storage", "activeTab", "tabs", "contextMenus", "<all_urls>"],
+  "browser_action": {
+    "default_title": "AI Assistant",
+    "default_popup": "extension/popup.html"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "sidebar_action": {
+    "default_title": "AI Assistant",
+    "default_panel": "extension/sidepanel.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-script.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "ai-assistant-extension@example.com"
+    }
+  }
+}

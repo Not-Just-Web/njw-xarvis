@@ -8,6 +8,7 @@ pnpm-debug.log*
 
 # Dependencies
 node_modules/
+.yarn/
 
 # Build outputs
 dist/

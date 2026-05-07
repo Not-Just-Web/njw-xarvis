@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM"],
+    "types": ["chrome", "react", "react-dom", "vite/client", "vitest/globals"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitAny": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "baseUrl": "."
+  },
+  "include": [
+    "extension/**/*.ts",
+    "extension/**/*.tsx",
+    "shared/**/*.ts",
+    "tests/**/*.ts",
+    "vite.config.ts"
+  ]
+}

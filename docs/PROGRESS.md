@@ -6,8 +6,8 @@ Last updated: 2026-05-07
 Owner: AI coding agent
 
 ## Current Phase Summary
-- Phase 0 Foundation: Not started
-- Phase 1 Core Runtime Wiring: Not started
+- Phase 0 Foundation: Completed
+- Phase 1 Core Runtime Wiring: Completed
 - Phase 2 Context Capture: Not started
 - Phase 3 Sidepanel Chat Experience: Not started
 - Phase 4 Context Menu Quick Actions: Not started
@@ -16,18 +16,18 @@ Owner: AI coding agent
 - Phase 7 Compliance, Hardening, and Release: Not started
 
 ## Active Chunk
-- Chunk: None
-- Branch: TBD
-- Status: Waiting to start
+- Chunk: 2.1 URL and selected text
+- Branch: main
+- Status: Ready to start
 - Blockers: None
 
 ## Chunk Checklist Mirror
 Reference: docs/IMPLEMENTATION_CHECKLIST.md
 
-- [ ] 0.1 Project scaffold
-- [ ] 0.2 Shared contracts
-- [ ] 1.1 Background orchestration
-- [ ] 1.2 Popup launcher
+- [x] 0.1 Project scaffold
+- [x] 0.2 Shared contracts
+- [x] 1.1 Background orchestration
+- [x] 1.2 Popup launcher
 - [ ] 2.1 URL and selected text
 - [ ] 2.2 Element snapshot
 - [ ] 2.3 Screenshot capture
@@ -55,6 +55,10 @@ Use one line per update.
 | 2026-05-07 | Repo automation baseline | Completed | Added git workflow policy, PR validation workflow, Chrome publish workflow, release checklist, README, hero graphic, and .gitignore | N/A |
 | 2026-05-07 | UX and wireframe alignment | Completed | Updated hero/wireframes for browser-left + right sidepanel, messenger-style bubbles, drag-drop/paste image, one-click screenshot, default slash skills, and Enter-to-send behavior | N/A |
 | 2026-05-07 | Design polish and phase guardrails | Completed | Fixed wireframe SVG issue and added design-lock micro-phases, phase gates, and anti-drift execution rules for AI implementation | N/A |
+| 2026-05-07 | 0.1 Project scaffold | Completed | Built React+TypeScript extension scaffold, added Chromium/Firefox manifests and builds, added Yarn CI, and validated typecheck/lint/test/build | Working tree |
+| 2026-05-07 | 0.2 Shared contracts | Completed | Added provider/session/runtime message types and integrated runtime envelope validation in background handler | Working tree |
+| 2026-05-07 | 1.1 Background orchestration | Completed | Added runtime router, active-provider registry, provider send flow, and health-check route in background service | Working tree |
+| 2026-05-07 | 1.2 Popup launcher | Completed | Implemented popup provider selector, status view, and sidepanel open action with React UI | Working tree |
 
 ## Agent Operating Rules
 - Do not start two chunks at once unless explicitly planned in parallel tracks.
