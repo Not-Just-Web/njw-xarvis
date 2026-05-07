@@ -82,20 +82,6 @@ jobs:
           zip -r ../../njw-xarvis-firefox.xpi .
           cd ../..
 
-      - name: Create Chromium CRX
-        run: |
-          mkdir -p .release
-
-          if [ -n "${{ secrets.CHROME_CRX_PRIVATE_KEY }}" ]; then
-            printf "%s" "${{ secrets.CHROME_CRX_PRIVATE_KEY }}" > .release/chrome-extension-key.pem
-            echo "Using configured CHROME_CRX_PRIVATE_KEY for stable CRX signing"
-          else
-            openssl genrsa -out .release/chrome-extension-key.pem 2048
-            echo "Generated temporary key for CRX (set CHROME_CRX_PRIVATE_KEY for stable updates)"
-          fi
-
-          npx crx3 dist/chromium --keyPath .release/chrome-extension-key.pem --crxPath njw-xarvis-chromium.crx
-
       - name: Get version from package.json
         id: version
         run: |
@@ -123,7 +109,6 @@ jobs:
             njw-xarvis-firefox.zip
             njw-xarvis-chromium-packed.tar.gz
             njw-xarvis-firefox-packed.tar.gz
-            njw-xarvis-chromium.crx
             njw-xarvis-firefox.xpi
           body: |
             ## 🚀 NJW Xarvis v${{ steps.version.outputs.version }}
@@ -131,11 +116,10 @@ jobs:
             ### 📦 Available Downloads
 
             - **Chromium** (Chrome, Brave, Edge): `njw-xarvis-chromium.zip`
-            - **Firefox**: `njw-xarvis-firefox.zip`
+            - **Firefox Single File**: `njw-xarvis-firefox.xpi`
+            - **Firefox Zip**: `njw-xarvis-firefox.zip`
             - **Chromium Packed**: `njw-xarvis-chromium-packed.tar.gz`
             - **Firefox Packed**: `njw-xarvis-firefox-packed.tar.gz`
-            - **Chromium Single File**: `njw-xarvis-chromium.crx`
-            - **Firefox Single File**: `njw-xarvis-firefox.xpi`
 
             ### 📥 Installation Instructions
 
