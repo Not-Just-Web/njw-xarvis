@@ -1,0 +1,131 @@
+name: Create Release
+
+# Manual workflow to create release artifacts (chromium + firefox zips)
+# Trigger: GitHub Actions > release.yml > Run workflow
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build Chromium extension
+        run: yarn build:chromium
+
+      - name: Build Firefox extension
+        run: yarn build:firefox
+
+      - name: Create Chromium zip
+        run: |
+          cd dist/chromium
+          zip -r ../../ai-assistant-chromium.zip .
+          cd ../..
+
+      - name: Create Firefox zip
+        run: |
+          cd dist/firefox
+          zip -r ../../ai-assistant-firefox.zip .
+          cd ../..
+
+      - name: Get version from package.json
+        id: version
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Check if release exists
+        id: check_release
+        run: |
+          if git rev-parse "refs/tags/${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create Release
+        if: steps.check_release.outputs.exists == 'false'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          release_name: "Release ${{ steps.version.outputs.version }}"
+          body: |
+            ## 🚀 AI Assistant Extension v${{ steps.version.outputs.version }}
+
+            ### 📦 Available Downloads
+
+            - **Chromium** (Chrome, Brave, Edge): `ai-assistant-chromium.zip`
+            - **Firefox**: `ai-assistant-firefox.zip`
+
+            ### 📥 Installation Instructions
+
+            #### Chrome / Brave / Edge
+            1. Download `ai-assistant-chromium.zip` and extract it
+            2. Go to `chrome://extensions/` (or `brave://extensions/`, `edge://extensions/`)
+            3. Enable "Developer mode" (top right)
+            4. Click "Load unpacked"
+            5. Select the extracted folder
+
+            #### Firefox
+            1. Download `ai-assistant-firefox.zip` and extract it
+            2. Go to `about:debugging#/runtime/this-firefox`
+            3. Click "Load Temporary Add-on"
+            4. Select the extracted folder or the manifest file
+
+            ### ✨ Features
+            - 🤖 Multi-provider AI support (Gemini, Claude, ChatGPT)
+            - 💬 Persistent chat sessions with context timeline
+            - 📸 Capture browser context (URL, screenshot, element)
+            - ⚡ Quick access via right-click context menu
+            - 🎯 Drag-drop image support
+            - 📝 Markdown rendering
+
+            ---
+            Built with React + TypeScript + Vite
+          draft: false
+          prerelease: false
+
+      - name: Upload Chromium asset
+        if: steps.check_release.outputs.exists == 'false'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./ai-assistant-chromium.zip
+          asset_name: ai-assistant-chromium.zip
+          asset_content_type: application/zip
+
+      - name: Upload Firefox asset
+        if: steps.check_release.outputs.exists == 'false'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./ai-assistant-firefox.zip
+          asset_name: ai-assistant-firefox.zip
+          asset_content_type: application/zip

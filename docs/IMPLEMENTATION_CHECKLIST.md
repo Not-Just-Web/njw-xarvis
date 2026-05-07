@@ -199,35 +199,35 @@ Definition of done:
 
 ## Phase 5: Provider Integrations
 ### Chunk 5.1 Gemini adapter
-- [ ] Implement adapter contract.
-- [ ] Implement auth and health check.
-- [ ] Implement streaming sendMessage.
+- [x] Implement adapter contract.
+- [x] Implement auth and health check.
+- [x] Implement streaming sendMessage.
 
 Suggested files:
 - providers/gemini/adapter.ts
 - providers/gemini/auth.ts
 
 ### Chunk 5.2 Claude adapter
-- [ ] Implement adapter contract.
-- [ ] Implement auth and health check.
-- [ ] Implement streaming sendMessage.
+- [x] Implement adapter contract.
+- [x] Implement auth and health check.
+- [x] Implement streaming sendMessage.
 
 Suggested files:
 - providers/claude/adapter.ts
 - providers/claude/auth.ts
 
 ### Chunk 5.3 ChatGPT adapter
-- [ ] Implement adapter contract.
-- [ ] Implement auth and health check.
-- [ ] Implement streaming sendMessage.
+- [x] Implement adapter contract.
+- [x] Implement auth and health check.
+- [x] Implement streaming sendMessage.
 
 Suggested files:
 - providers/chatgpt/adapter.ts
 - providers/chatgpt/auth.ts
 
 ### Chunk 5.4 Dynamic provider registry
-- [ ] Add provider registry abstraction.
-- [ ] Add custom provider plugin entry path.
+- [x] Add provider registry abstraction.
+- [x] Add custom provider plugin entry path.
 
 Suggested files:
 - shared/provider-contract/registry.ts

@@ -1,9 +1,9 @@
 name: Publish Chrome Extension
 
+# DISABLED: This workflow is disabled until extension is complete and ready for store submission
+# Will be re-enabled for final release publishing
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+  workflow_dispatch: # Manual trigger only - no automatic pushes
 
 permissions:
   contents: read

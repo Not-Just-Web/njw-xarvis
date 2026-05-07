@@ -1,38 +1,15 @@
-import type { ProviderAdapter, ProviderId, ProviderSendPayload, ProviderSendResult } from '../../shared/provider-contract/types';
-
-const createMockAdapter = (id: ProviderId, displayName: string): ProviderAdapter => ({
-  id,
-  displayName,
-  supports: {
-    vision: true,
-    tools: false,
-    maxContextBytes: 300000
-  },
-  async authenticate() {
-    return true;
-  },
-  async sendMessage(payload: ProviderSendPayload): Promise<ProviderSendResult> {
-    return {
-      text: `Mock response from ${displayName}: ${payload.messages.at(-1)?.content ?? ''}`,
-      model: `${id}-mock-v1`
-    };
-  }
-});
-
-const providerMap: Record<ProviderId, ProviderAdapter> = {
-  gemini: createMockAdapter('gemini', 'Gemini'),
-  claude: createMockAdapter('claude', 'Claude'),
-  chatgpt: createMockAdapter('chatgpt', 'ChatGPT')
-};
+import type { ProviderId, ProviderSendPayload, ProviderSendResult, ProviderAuthConfig } from '../../shared/provider-contract/types';
+import { providerRegistry } from '../../shared/provider-contract/registry';
 
 let activeProviderId: ProviderId = 'gemini';
 
 export const setActiveProvider = (providerId: ProviderId): ProviderId => {
-  if (!providerMap[providerId]) {
+  if (!providerRegistry.has(providerId)) {
     throw new Error(`Provider not registered: ${providerId}`);
   }
 
   activeProviderId = providerId;
+  console.log(`[ProviderRouter] Active provider set to: ${providerId}`);
   return activeProviderId;
 };
 
@@ -40,10 +17,23 @@ export const getActiveProvider = (): ProviderId => {
   return activeProviderId;
 };
 
+export const listProviders = () => {
+  return providerRegistry.listAll().map((adapter) => ({
+    id: adapter.id,
+    displayName: adapter.displayName,
+    supports: adapter.supports
+  }));
+};
+
+export const setProviderAuth = async (providerId: ProviderId, config: ProviderAuthConfig): Promise<boolean> => {
+  providerRegistry.setAuth(providerId, config);
+  return providerRegistry.authenticate(providerId);
+};
+
 export const sendWithActiveProvider = async (
   payload: ProviderSendPayload
 ): Promise<ProviderSendResult> => {
-  const adapter = providerMap[activeProviderId];
+  const adapter = providerRegistry.get(activeProviderId);
   if (!adapter) {
     throw new Error(`No adapter found for provider: ${activeProviderId}`);
   }

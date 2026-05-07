@@ -1,6 +1,6 @@
 {
   "name": "ai-assistant-extension",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Cross-browser AI assistant extension built with React and TypeScript",
   "type": "module",

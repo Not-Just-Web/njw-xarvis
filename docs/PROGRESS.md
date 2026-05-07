@@ -11,13 +11,13 @@ Owner: AI coding agent
 - Phase 2 Context Capture: Completed
 - Phase 3 Sidepanel Chat Experience: Completed
 - Phase 4 Context Menu Quick Actions: Completed
-- Phase 5 Provider Integrations: Not started
+- Phase 5 Provider Integrations: Completed
 - Phase 6 Connector and Authentication: Not started
 - Phase 7 Compliance, Hardening, and Release: Not started
 
 ## Active Chunk
-- Chunk: 5.1 Gemini adapter
-- Branch: feature/phase-5-provider-integrations
+- Chunk: 6.1 Connector API baseline
+- Branch: feature/phase-6-connector-auth
 - Status: Ready to start
 - Blockers: None
 
@@ -62,6 +62,7 @@ Use one line per update.
 | 2026-05-07 | 2.1 URL capture + selection | Completed | Added content-script URL/text capture, element picker with overlay, screenshot capture, context normalizer with truncation guard | feature/phase-2-context-capture |
 | 2026-05-07 | 3.1-3.3 Sidepanel chat | Completed | Session store (create/list/resume/archive), full chat UI with drag-drop/paste image, slash-skill autocomplete, hamburger session toggle, Enter-to-send, context chips | feature/phase-3-sidepanel-chat |
 | 2026-05-07 | 4.1-4.2 Context menu | Completed | Registered open chat, send selection, send URL, send element context menus; immediate context handoff to sidepanel on click | feature/phase-4-context-menu |
+| 2026-05-07 | 5.1-5.4 Provider adapters | Completed | Implemented Gemini, Claude, ChatGPT adapters with real API structures; created dynamic provider registry; updated provider-router to use real adapters | feature/phase-5-provider-integrations |
 
 ## Agent Operating Rules
 - Do not start two chunks at once unless explicitly planned in parallel tracks.
