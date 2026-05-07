@@ -8,10 +8,6 @@
   },
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/extension/sidepanel.html"
-    },
-    {
       "source": "/health",
       "destination": "/api/health"
     }
