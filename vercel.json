@@ -5,11 +5,5 @@
   "env": {
     "NODE_ENV": "production",
     "ALLOWED_ORIGINS": "chrome-extension://*,moz-extension://*"
-  },
-  "functions": {
-    "api/**/*.js": {
-      "memory": 1024,
-      "maxDuration": 60
-    }
   }
 }
