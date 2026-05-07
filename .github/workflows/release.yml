@@ -1,8 +1,12 @@
 name: Create Release
 
-# Manual workflow to create release artifacts (chromium + firefox zips)
-# Trigger: GitHub Actions > release.yml > Run workflow
+# Auto-creates release artifacts (chromium + firefox zips) when merged to main
+# Trigger: Automatic on pushes to main (manual option still available via workflow_dispatch)
+# Validates: typecheck, lint, test before building
+# Creates: Release with version from package.json (skips if already exists)
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
