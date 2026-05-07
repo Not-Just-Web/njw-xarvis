@@ -2,8 +2,8 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { v4 as uuidv4 } from 'uuid';
-import authRoutes from './routes/auth.js';
-import providerRoutes from './routes/provider-proxy.js';
+import authRoutes from './routes/auth';
+import providerRoutes from './routes/provider-proxy';
 
 dotenv.config();
 
