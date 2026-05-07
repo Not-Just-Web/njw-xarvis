@@ -127,6 +127,7 @@ Purpose: define a stable architecture for a cross-browser AI assistant extension
 - Messenger-style message bubbles: assistant on left, user on right.
 - Streaming text rendering with cancel and retry.
 - Session list with last-updated sorting and search.
+- Session list must be collapsible/expandable inside the sidepanel and never affect the left browser tab layout.
 - Resume session, create new session, and per-session context timeline.
 - Context chip remove and inspect before send.
 - Clear connection and provider status badges.
@@ -155,3 +156,48 @@ Purpose: define a stable architecture for a cross-browser AI assistant extension
 - connector-api
 - tests
 - docs
+
+## 12) Delivery Micro-Phases
+Use these micro-phases to keep implementation small and reviewable.
+
+### M0 Design Lock
+- Finalize sidepanel-hero and all wireframes.
+- Freeze layout primitives: header, session rail, chat canvas, composer, chip row.
+- Freeze interaction primitives: enter-send, shift-enter newline, slash skills, drag-drop/paste.
+
+### M1 Contracts and Runtime Skeleton
+- Finalize shared types and runtime message envelopes.
+- Add background router + provider router skeleton with typed command paths.
+
+### M2 Capture Foundations
+- URL capture and selected text capture.
+- Screenshot capture + compression.
+- Element picker + element snapshot payload.
+
+### M3 Sidepanel UX Core
+- Messenger-style bubbles.
+- Collapsible/expandable session rail with resize handle behavior.
+- Composer behavior and context chips.
+
+### M4 Session and Context Intelligence
+- Session create/resume/rename/archive.
+- Per-session context timeline and event linking.
+
+### M5 Provider Integrations
+- Gemini, Claude, ChatGPT adapters.
+- Provider switching and health checks.
+
+### M6 Connector, Auth, and Hardening
+- Connector API proxy/token exchange.
+- Security, privacy, and permission hardening.
+
+### M7 Store Readiness and Release
+- Chrome + Firefox packaging.
+- Compliance pass and release checklist completion.
+
+## 13) Phase Gates (Do Not Skip)
+- Gate A: M0 approved before coding UI.
+- Gate B: M1 types stable before provider-specific logic.
+- Gate C: M3 UX acceptance before advanced UAT flows.
+- Gate D: M6 security review before store submission.
+- Gate E: M7 release checklist complete before publish.

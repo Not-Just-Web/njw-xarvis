@@ -1,7 +1,14 @@
 <svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1280" height="720" fill="#ECF1F7"/>
+  <defs>
+    <linearGradient id="sendBtn" x1="1178" y1="612" x2="1220" y2="656" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
 
-  <!-- Browser frame -->
+  <rect width="1280" height="720" fill="#ECF1F7"/>
+  <text x="16" y="20" fill="#475569" font-size="12" font-family="Arial, sans-serif">Wireframe: Sidepanel Layout (professional spacing)</text>
+
   <rect x="24" y="24" width="1232" height="672" rx="14" fill="#FFFFFF" stroke="#D1D5DB"/>
   <rect x="24" y="24" width="1232" height="42" rx="14" fill="#F3F4F6"/>
   <circle cx="46" cy="45" r="6" fill="#F87171"/>
@@ -10,7 +17,7 @@
   <rect x="120" y="35" width="720" height="20" rx="6" fill="#E5E7EB"/>
   <text x="140" y="49" fill="#6B7280" font-size="11" font-family="Arial, sans-serif">https://shop.example.com/checkout</text>
 
-  <!-- Left: current tab content -->
+  <!-- Left browser tab -->
   <rect x="40" y="78" width="850" height="602" fill="#F8FAFC"/>
   <rect x="56" y="98" width="420" height="20" rx="4" fill="#CBD5E1"/>
   <rect x="56" y="128" width="780" height="12" rx="4" fill="#E2E8F0"/>
@@ -20,55 +27,74 @@
   <rect x="56" y="392" width="780" height="40" rx="8" fill="#FEE2E2"/>
   <text x="72" y="416" fill="#B91C1C" font-size="12" font-family="Arial, sans-serif">Validation error: Postcode format is invalid.</text>
   <rect x="56" y="448" width="160" height="36" rx="8" fill="#2563EB"/>
-  <text x="136" y="471" text-anchor="middle" fill="white" font-size="12" font-family="Arial, sans-serif">Place Order</text>
+  <text x="136" y="471" text-anchor="middle" fill="#FFFFFF" font-size="12" font-family="Arial, sans-serif">Place Order</text>
 
-  <!-- Right: sidepanel only -->
+  <!-- Right sidepanel -->
   <rect x="890" y="78" width="350" height="602" fill="#F7F8FA" stroke="#E5E7EB"/>
   <rect x="890" y="78" width="350" height="48" fill="#FFFFFF" stroke="#E5E7EB"/>
-  <text x="904" y="108" fill="#111827" font-size="14" font-weight="700" font-family="Arial, sans-serif">AI Assistant</text>
+  <rect x="900" y="90" width="18" height="24" rx="6" fill="#EEF2FF"/>
+  <text x="909" y="106" text-anchor="middle" fill="#4338CA" font-size="12" font-family="Arial, sans-serif">≡</text>
+  <text x="924" y="108" fill="#111827" font-size="14" font-weight="700" font-family="Arial, sans-serif">AI Assistant</text>
   <rect x="1020" y="90" width="120" height="24" rx="12" fill="#E8F5E9"/>
   <text x="1080" y="106" text-anchor="middle" fill="#1B5E20" font-size="11" font-family="Arial, sans-serif">Gemini ▾</text>
   <rect x="1148" y="90" width="80" height="24" rx="12" fill="#EFF6FF"/>
   <text x="1188" y="106" text-anchor="middle" fill="#1D4ED8" font-size="11" font-family="Arial, sans-serif">New Chat</text>
 
-  <!-- Skill chips -->
-  <text x="904" y="146" fill="#6B7280" font-size="10" font-family="Arial, sans-serif">Default Skills</text>
-  <rect x="904" y="152" width="82" height="22" rx="11" fill="#EEF2FF"/><text x="945" y="166" text-anchor="middle" fill="#4338CA" font-size="10" font-family="Arial, sans-serif">/screenshot</text>
-  <rect x="992" y="152" width="96" height="22" rx="11" fill="#FCE7F3"/><text x="1040" y="166" text-anchor="middle" fill="#9D174D" font-size="10" font-family="Arial, sans-serif">/select-element</text>
-  <rect x="1092" y="152" width="78" height="22" rx="11" fill="#ECFDF5"/><text x="1131" y="166" text-anchor="middle" fill="#047857" font-size="10" font-family="Arial, sans-serif">/test-section</text>
-  <rect x="1174" y="152" width="62" height="22" rx="11" fill="#FFF7ED"/><text x="1205" y="166" text-anchor="middle" fill="#C2410C" font-size="10" font-family="Arial, sans-serif">/test-feature</text>
+  <!-- Sessions collapsed -->
+  <rect x="900" y="136" width="20" height="406" rx="8" fill="#F1F5F9" stroke="#E2E8F0"/>
+  <text x="910" y="342" text-anchor="middle" fill="#64748B" font-size="10" font-family="Arial, sans-serif">▶</text>
 
-  <!-- Chat background area -->
-  <rect x="900" y="182" width="330" height="360" rx="10" fill="#ECEFF3"/>
+  <!-- Resizer -->
+  <rect x="924" y="302" width="4" height="72" rx="2" fill="#CBD5E1"/>
 
-  <!-- Left/right bubbles (messenger style) -->
-  <rect x="912" y="196" width="236" height="56" rx="14" fill="#FFFFFF"/>
-  <text x="924" y="218" fill="#374151" font-size="11" font-family="Arial, sans-serif">Attached screenshot and selected button.</text>
-  <text x="924" y="234" fill="#6B7280" font-size="11" font-family="Arial, sans-serif">Can you validate checkout flow?</text>
+  <!-- Skills row -->
+  <text x="938" y="152" fill="#6B7280" font-size="10" font-family="Arial, sans-serif">Default Skills</text>
+  <rect x="938" y="158" width="82" height="22" rx="11" fill="#EEF2FF"/>
+  <text x="979" y="172" text-anchor="middle" fill="#4338CA" font-size="10" font-family="Arial, sans-serif">/screenshot</text>
+  <rect x="1026" y="158" width="96" height="22" rx="11" fill="#FCE7F3"/>
+  <text x="1074" y="172" text-anchor="middle" fill="#9D174D" font-size="10" font-family="Arial, sans-serif">/select-element</text>
+  <rect x="1126" y="158" width="78" height="22" rx="11" fill="#ECFDF5"/>
+  <text x="1165" y="172" text-anchor="middle" fill="#047857" font-size="10" font-family="Arial, sans-serif">/test-section</text>
+  <rect x="1208" y="158" width="30" height="22" rx="11" fill="#FFF7ED"/>
+  <text x="1223" y="172" text-anchor="middle" fill="#C2410C" font-size="10" font-family="Arial, sans-serif">/…</text>
 
-  <rect x="1004" y="264" width="214" height="62" rx="14" fill="#DCEBFF"/>
-  <text x="1016" y="286" fill="#1E3A8A" font-size="11" font-family="Arial, sans-serif">I found 3 checks. 1 failed:</text>
-  <text x="1016" y="302" fill="#1E3A8A" font-size="11" font-family="Arial, sans-serif">button missing aria-label.</text>
-  <text x="1208" y="317" text-anchor="end" fill="#60A5FA" font-size="10" font-family="Arial, sans-serif">AI</text>
+  <!-- Chat canvas -->
+  <rect x="938" y="190" width="292" height="340" rx="12" fill="#ECEFF3"/>
 
-  <rect x="912" y="336" width="214" height="42" rx="14" fill="#FFFFFF"/>
-  <text x="924" y="360" fill="#374151" font-size="11" font-family="Arial, sans-serif">Run /test-feature checkout button</text>
+  <!-- Assistant bubble (left) -->
+  <rect x="948" y="204" width="218" height="62" rx="16" fill="#FFFFFF"/>
+  <text x="960" y="226" fill="#374151" font-size="10" font-family="Arial, sans-serif">Attached screenshot and selected button.</text>
+  <text x="960" y="242" fill="#6B7280" font-size="10" font-family="Arial, sans-serif">Can you validate checkout flow?</text>
 
-  <rect x="1002" y="390" width="216" height="56" rx="14" fill="#DCEBFF"/>
-  <text x="1014" y="412" fill="#1E3A8A" font-size="11" font-family="Arial, sans-serif">Done. Pass 2, Partial 1, Fail 1.</text>
-  <text x="1014" y="428" fill="#1E3A8A" font-size="11" font-family="Arial, sans-serif">Want an exportable QA summary?</text>
+  <!-- User bubble (right) -->
+  <rect x="1004" y="278" width="214" height="66" rx="16" fill="#DCEBFF"/>
+  <text x="1016" y="300" fill="#1E3A8A" font-size="10" font-family="Arial, sans-serif">I found 3 checks. 1 failed:</text>
+  <text x="1016" y="316" fill="#1E3A8A" font-size="10" font-family="Arial, sans-serif">button missing aria-label.</text>
+  <text x="1210" y="332" text-anchor="end" fill="#60A5FA" font-size="9" font-family="Arial, sans-serif">AI</text>
+
+  <!-- Assistant bubble (left) -->
+  <rect x="948" y="356" width="208" height="44" rx="16" fill="#FFFFFF"/>
+  <text x="960" y="381" fill="#374151" font-size="10" font-family="Arial, sans-serif">Run /test-feature checkout button</text>
+
+  <!-- User bubble (right) -->
+  <rect x="998" y="412" width="220" height="62" rx="16" fill="#DCEBFF"/>
+  <text x="1010" y="434" fill="#1E3A8A" font-size="10" font-family="Arial, sans-serif">Done. Pass 2, Partial 1, Fail 1.</text>
+  <text x="1010" y="450" fill="#1E3A8A" font-size="10" font-family="Arial, sans-serif">Want an exportable QA summary?</text>
 
   <!-- Context chips -->
-  <rect x="904" y="550" width="92" height="22" rx="11" fill="#DBEAFE"/><text x="950" y="564" text-anchor="middle" fill="#1D4ED8" font-size="10" font-family="Arial, sans-serif">URL ×</text>
-  <rect x="1002" y="550" width="110" height="22" rx="11" fill="#FEF3C7"/><text x="1057" y="564" text-anchor="middle" fill="#92400E" font-size="10" font-family="Arial, sans-serif">Screenshot ×</text>
-  <rect x="1118" y="550" width="110" height="22" rx="11" fill="#FCE7F3"/><text x="1173" y="564" text-anchor="middle" fill="#9D174D" font-size="10" font-family="Arial, sans-serif">Element ×</text>
+  <rect x="938" y="542" width="84" height="22" rx="11" fill="#DBEAFE"/>
+  <text x="980" y="556" text-anchor="middle" fill="#1D4ED8" font-size="10" font-family="Arial, sans-serif">URL ×</text>
+  <rect x="1028" y="542" width="102" height="22" rx="11" fill="#FEF3C7"/>
+  <text x="1079" y="556" text-anchor="middle" fill="#92400E" font-size="10" font-family="Arial, sans-serif">Screenshot ×</text>
+  <rect x="1136" y="542" width="94" height="22" rx="11" fill="#FCE7F3"/>
+  <text x="1183" y="556" text-anchor="middle" fill="#9D174D" font-size="10" font-family="Arial, sans-serif">Element ×</text>
 
-  <!-- Input area -->
-  <rect x="900" y="580" width="330" height="90" rx="10" fill="#FFFFFF" stroke="#D1D5DB"/>
-  <text x="912" y="602" fill="#9CA3AF" font-size="10" font-family="Arial, sans-serif">Drop image here or use /screenshot</text>
-  <rect x="912" y="610" width="248" height="46" rx="8" fill="#F9FAFB" stroke="#E5E7EB"/>
-  <text x="922" y="637" fill="#6B7280" font-size="11" font-family="Arial, sans-serif">Message AI about this page context...</text>
-  <rect x="1168" y="610" width="52" height="46" rx="8" fill="#2563EB"/>
-  <text x="1194" y="638" text-anchor="middle" fill="#FFFFFF" font-size="20" font-family="Arial, sans-serif">↑</text>
-  <text x="912" y="664" fill="#6B7280" font-size="10" font-family="Arial, sans-serif">Enter = Send  ·  Shift+Enter = New line</text>
+  <!-- Composer -->
+  <rect x="938" y="570" width="292" height="100" rx="12" fill="#FFFFFF" stroke="#D1D5DB"/>
+  <text x="948" y="592" fill="#9CA3AF" font-size="10" font-family="Arial, sans-serif">Drop image here or use /screenshot</text>
+  <rect x="948" y="602" width="224" height="56" rx="10" fill="#F9FAFB" stroke="#E5E7EB"/>
+  <text x="960" y="634" fill="#6B7280" font-size="10" font-family="Arial, sans-serif">Message AI about this page context...</text>
+  <rect x="1178" y="612" width="42" height="42" rx="21" fill="url(#sendBtn)"/>
+  <text x="1199" y="637" text-anchor="middle" fill="#FFFFFF" font-size="16" font-family="Arial, sans-serif">↑</text>
+  <text x="948" y="666" fill="#6B7280" font-size="10" font-family="Arial, sans-serif">Enter = Send · Shift+Enter = New line</text>
 </svg>

@@ -54,6 +54,7 @@ Use one line per update.
 | 2026-05-07 | Planning docs | Completed | Added architecture, implementation checklist, compliance checklist, and progress tracker | N/A |
 | 2026-05-07 | Repo automation baseline | Completed | Added git workflow policy, PR validation workflow, Chrome publish workflow, release checklist, README, hero graphic, and .gitignore | N/A |
 | 2026-05-07 | UX and wireframe alignment | Completed | Updated hero/wireframes for browser-left + right sidepanel, messenger-style bubbles, drag-drop/paste image, one-click screenshot, default slash skills, and Enter-to-send behavior | N/A |
+| 2026-05-07 | Design polish and phase guardrails | Completed | Fixed wireframe SVG issue and added design-lock micro-phases, phase gates, and anti-drift execution rules for AI implementation | N/A |
 
 ## Agent Operating Rules
 - Do not start two chunks at once unless explicitly planned in parallel tracks.

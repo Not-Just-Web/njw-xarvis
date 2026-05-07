@@ -41,9 +41,10 @@ A cross-browser AI extension for Chrome, Firefox, and Brave that lets you chat w
 - Sidepanel uses simple background colors and WhatsApp/Messenger-style bubble flow.
 - Context chips and capture controls are kept near the composer for fast testing loops.
 
-![Sidepanel Wireframe](docs/assets/wireframe-sidepanel.svg)
-![Context Capture Wireframe](docs/assets/wireframe-context-capture.svg)
-![UAT QA Wireframe](docs/assets/wireframe-uat-qa.svg)
+Wireframes are maintained in docs for cleaner README landing:
+- [Sidepanel Wireframe](docs/assets/wireframe-sidepanel.svg)
+- [Context Capture Wireframe](docs/assets/wireframe-context-capture.svg)
+- [UAT QA Wireframe](docs/assets/wireframe-uat-qa.svg)
 
 ## Workflow Overview
 ```mermaid

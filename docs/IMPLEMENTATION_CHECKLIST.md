@@ -7,6 +7,34 @@ Status legend:
 - [~] In progress
 - [x] Completed
 
+## Pre-Phase: Design Lock and Acceptance
+### Chunk D0.1 Visual consistency lock
+- [ ] Align sidepanel hero and all wireframes to one visual system.
+- [ ] Ensure no overlap in bubbles, chips, or session controls.
+- [ ] Ensure session rail behavior is explicit: default closed, hamburger open/close, resizable.
+
+Suggested files:
+- docs/assets/sidepanel-hero.svg
+- docs/assets/wireframe-sidepanel.svg
+- docs/assets/wireframe-context-capture.svg
+- docs/assets/wireframe-uat-qa.svg
+
+Definition of done:
+- Design artifacts are visually consistent and approved for build.
+
+### Chunk D0.2 UX behavior lock
+- [ ] Confirm interaction contract: Enter send, Shift+Enter newline.
+- [ ] Confirm slash skills baseline: /screenshot, /select-element, /test-section, /test-feature.
+- [ ] Confirm drag-drop/paste image and one-click screenshot are required.
+
+Suggested files:
+- docs/ARCHITECTURE.md
+- docs/IMPLEMENTATION_CHECKLIST.md
+- AGENTS.md
+
+Definition of done:
+- Interaction behavior is documented and frozen before feature coding.
+
 ## Phase 0: Foundation and Tooling
 ### Chunk 0.1 Project scaffold
 - [ ] Initialize TypeScript WebExtensions workspace.
@@ -111,6 +139,7 @@ Definition of done:
 - [ ] Implement messenger-style bubble layout (assistant left, user right).
 - [ ] Implement Enter-to-send and Shift+Enter-newline behavior.
 - [ ] Add slash-skill autocomplete for /screenshot, /select-element, /test-section, /test-feature.
+- [ ] Implement collapsible/expandable session drawer inside sidepanel.
 
 Suggested files:
 - extension/sidepanel/App.tsx
@@ -263,3 +292,6 @@ Definition of done:
 - Keep changes small and scoped to listed files.
 - Update progress tracker after each completed chunk.
 - If architecture conflict appears, update docs first, then code.
+- Never change approved layout primitives unless Design Lock chunks are explicitly reopened.
+- If a task crosses more than one phase, split it into separate PRs by chunk.
+- Prefer one chunk per PR to keep review and rollback simple.

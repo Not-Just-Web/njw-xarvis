@@ -65,6 +65,7 @@ Provider contract (minimum):
 - Preview what context will be sent before submit.
 - Keep provider switching stateful but isolated (no cross-provider message leakage).
 - Support session management: create new chat, resume past chat, and view per-session context history.
+- Session list must be collapsible/expandable within the sidepanel and must not shift or alter left tab page content.
 - Add context chips in the composer (URL, element, screenshot) with remove/inspect actions before send.
 - Composer must support one-click current-tab screenshot, drag-drop/paste image, Enter-to-send, and Shift+Enter newline.
 - Provide default slash skills: /screenshot, /select-element, /test-section, /test-feature.
