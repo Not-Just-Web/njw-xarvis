@@ -97,31 +97,18 @@ npm run test:all           # Test both
 
 ## Production Deployment
 
-### Option 1: Local Development (Recommended for Testing)
+### Connector API Only (Recommended)
 
-The extension uses `http://localhost:3001` by default. Simply run both locally:
+Only the **Connector API** needs to be deployed to Vercel. The **extension builds locally** and loads into your browser.
 
-```bash
-npm run dev:all
-```
-
-### Option 2: Vercel-Hosted Connector API
-
-Deploy the connector API to Vercel for production use:
-
-#### 1. Prepare Deployment
+#### 1. Deploy Connector API to Vercel
 
 ```bash
-# Create .env file for your Vercel URL
+# Create .env file with your Vercel URL (after deployment)
 echo "VITE_CONNECTOR_API_URL=https://your-project-name.vercel.app" > .env
-
-# Build extension with Vercel URL
-npm run build:chromium
-npm run build:firefox
 ```
 
-#### 2. Deploy Connector API to Vercel
-
+**Vercel Deployment Steps:**
 1. Push this repository to GitHub
 2. Go to [https://vercel.com](https://vercel.com) and sign in with GitHub
 3. Click "New Project"
@@ -129,41 +116,48 @@ npm run build:firefox
 5. Configure environment variables:
    - `JWT_SECRET`: Generate a strong secret: `openssl rand -base64 32`
    - `ALLOWED_ORIGINS`: `chrome-extension://*,moz-extension://*`
-6. Click "Deploy"
-7. Copy your Vercel URL (e.g., `https://your-project-name.vercel.app`)
+6. Click "Deploy" — Vercel will automatically build and deploy the connector API
 
-#### 3. Update Extension Build
+#### 2. Build Extension Locally
 
 ```bash
-# Update environment variable with your Vercel URL
+# Update environment with your Vercel URL
 echo "VITE_CONNECTOR_API_URL=https://your-project-name.vercel.app" > .env
 
-# Rebuild extension to include Vercel endpoint
+# Build extension (local only - no deployment needed)
 npm run build:chromium
 npm run build:firefox
 ```
 
+#### 3. Load Extension into Browser
+
+**Chrome or Brave:**
+1. Open `chrome://extensions` (or `brave://extensions`)
+2. Enable Developer mode
+3. Click "Load unpacked"
+4. Select `dist/chromium`
+
+**Firefox:**
+1. Open `about:debugging#/runtime/this-firefox`
+2. Click "Load Temporary Add-on"
+3. Select `dist/firefox/manifest.json`
+
 #### 4. Extension Auto-Connects
 
-The extension automatically connects to the API configured at build time. No additional setup needed.
+The extension automatically connects to your Vercel-hosted connector API configured at build time.
 
 ### Verify Deployment
 
 ```bash
-# Test local API
-curl http://localhost:3001/health
-
-# Test Vercel API
+# Test your Vercel API
 curl https://your-project-name.vercel.app/health
-```
 
-Expected response:
-```json
-{
-  "status": "ok",
-  "version": "1.0.0",
-  "timestamp": "2026-05-07T12:00:00Z"
-}
+# Expected response:
+# {
+#   "status": "ok",
+#   "version": "1.0.0",
+#   "timestamp": "2026-05-07T12:00:00Z"
+# }
 ```
 
 ## Bun Alternative
