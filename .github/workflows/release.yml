@@ -31,16 +31,16 @@ jobs:
           node-version: 20
           cache: yarn
 
-      - name: Install dependencies
-        run: yarn install --immutable
+      - name: Install dependencies (root + connector-api)
+        run: yarn install --immutable && cd connector-api && npm ci
 
-      - name: Type check
-        run: yarn typecheck
+      - name: Type check (extension + connector-api)
+        run: yarn typecheck:all
 
-      - name: Lint
-        run: yarn lint
+      - name: Lint (extension + connector-api)
+        run: yarn lint:all
 
-      - name: Run tests
+      - name: Run tests (extension only)
         run: yarn test
 
       - name: Build Chromium extension
@@ -48,6 +48,9 @@ jobs:
 
       - name: Build Firefox extension
         run: yarn build:firefox
+
+      - name: Build Connector API
+        run: cd connector-api && npm run build
 
       - name: Create Chromium zip
         run: |
