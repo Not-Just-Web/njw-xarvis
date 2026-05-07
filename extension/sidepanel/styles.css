@@ -132,6 +132,48 @@ h1 {
   font-weight: 700;
 }
 
+.connect-banner {
+  margin: 10px 16px 0;
+  padding: 10px;
+  border: 1px solid #cfe1ff;
+  border-radius: 10px;
+  background: #f3f8ff;
+  display: grid;
+  gap: 8px;
+}
+
+.connect-banner p {
+  margin: 0;
+  font-size: 13px;
+  color: #26426f;
+}
+
+.connect-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.connect-actions input {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  font: inherit;
+}
+
+.connect-actions button {
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 700;
+  background: #006d77;
+  color: #fff;
+}
+
+.connect-actions button:disabled {
+  opacity: 0.6;
+}
+
 .timeline {
   overflow: auto;
   padding: 16px;

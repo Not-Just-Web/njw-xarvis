@@ -33,6 +33,8 @@ export function SidepanelApp(): JSX.Element {
   const [skillHint, setSkillHint] = useState(false);
   const [providerId, setProviderId] = useState<ProviderId>('gemini');
   const [providerConnected, setProviderConnected] = useState(false);
+  const [providerApiKey, setProviderApiKey] = useState('');
+  const [connectingProvider, setConnectingProvider] = useState(false);
   const [sending, setSending] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -153,7 +155,7 @@ export function SidepanelApp(): JSX.Element {
         sessionId: targetSession.id,
         role: 'assistant',
         content:
-          'Provider is not connected. Open popup, connect your provider API key, then use Quick Launch.'
+          'Provider is not connected. Use the connect box above the chat to authenticate and continue.'
       });
       setMessages((prev) => [...prev, disconnectedReply]);
       setChips([]);
@@ -195,6 +197,41 @@ export function SidepanelApp(): JSX.Element {
     } finally {
       setSending(false);
       setChips([]);
+    }
+  };
+
+  const connectProviderFromChat = async () => {
+    const apiKey = providerApiKey.trim();
+    if (!apiKey || !hasChrome || !chrome.runtime?.sendMessage) {
+      return;
+    }
+
+    try {
+      setConnectingProvider(true);
+
+      const response = (await chrome.runtime.sendMessage({
+        type: 'provider.connect',
+        payload: {
+          providerId,
+          apiKey
+        }
+      })) as RuntimeResponse;
+
+      if (response.payload.ok === true && response.payload.connected === true) {
+        setProviderConnected(true);
+        setProviderApiKey('');
+
+        if (activeSession) {
+          const infoMessage = addMessage({
+            sessionId: activeSession.id,
+            role: 'assistant',
+            content: 'Provider connected successfully. You can send messages now.'
+          });
+          setMessages((prev) => [...prev, infoMessage]);
+        }
+      }
+    } finally {
+      setConnectingProvider(false);
     }
   };
 
@@ -274,6 +311,30 @@ export function SidepanelApp(): JSX.Element {
             {providerId.charAt(0).toUpperCase() + providerId.slice(1)} · {providerConnected ? 'Connected' : 'Disconnected'}
           </span>
         </header>
+
+        {!providerConnected && (
+          <section className="connect-banner" aria-label="Provider authentication">
+            <p>
+              Connect {providerId.charAt(0).toUpperCase() + providerId.slice(1)} to start chatting.
+            </p>
+            <div className="connect-actions">
+              <input
+                type="password"
+                value={providerApiKey}
+                onChange={(event) => setProviderApiKey(event.target.value)}
+                placeholder="Enter provider API key"
+                disabled={connectingProvider}
+              />
+              <button
+                type="button"
+                onClick={() => void connectProviderFromChat()}
+                disabled={connectingProvider || !providerApiKey.trim()}
+              >
+                {connectingProvider ? 'Connecting...' : 'Connect'}
+              </button>
+            </div>
+          </section>
+        )}
 
         <section className="timeline" ref={timelineRef} aria-label="Messages">
           {messages.length === 0 && (
