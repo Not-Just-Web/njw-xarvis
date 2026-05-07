@@ -220,6 +220,8 @@ export const initializeAuthListener = (): void => {
           const providerId = key.replace('auth_', '');
           const change = changes[key];
 
+          if (!change) continue;
+
           if (change.newValue) {
             tokenStore.set(providerId, {
               token: change.newValue.token,
