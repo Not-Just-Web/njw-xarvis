@@ -97,9 +97,9 @@ Definition of done:
 
 ## Phase 2: Context Capture
 ### Chunk 2.1 URL and selected text
-- [ ] Capture current tab URL.
-- [ ] Capture selected text from page.
-- [ ] Add context chips in sidepanel composer.
+- [x] Capture current tab URL.
+- [x] Capture selected text from page.
+- [x] Add context chips in sidepanel composer.
 
 Suggested files:
 - extension/content-script/selection.ts
@@ -107,9 +107,9 @@ Suggested files:
 - extension/background/context-normalizer.ts
 
 ### Chunk 2.2 Element snapshot
-- [ ] Add element picker trigger.
-- [ ] Capture selector, tag, role, text excerpt, bounding box.
-- [ ] Send element snapshot as context event.
+- [x] Add element picker trigger.
+- [x] Capture selector, tag, role, text excerpt, bounding box.
+- [x] Send element snapshot as context event.
 
 Suggested files:
 - extension/content-script/element-picker.ts
@@ -117,10 +117,10 @@ Suggested files:
 - extension/background/context-normalizer.ts
 
 ### Chunk 2.3 Screenshot capture
-- [ ] Capture visible tab screenshot.
-- [ ] Compress and size-bound image payload.
-- [ ] Attach screenshot context chip with preview.
-- [ ] Add one-click current-tab screenshot action in composer toolbar.
+- [x] Capture visible tab screenshot.
+- [x] Compress and size-bound image payload.
+- [x] Attach screenshot context chip with preview.
+- [x] Add one-click current-tab screenshot action in composer toolbar.
 - [ ] Support drag-drop and paste image into composer.
 
 Suggested files:
