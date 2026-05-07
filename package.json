@@ -1,6 +1,6 @@
 {
   "name": "njw-xarvis",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "private": true,
   "description": "njw-xarvis: Cross-browser AI sidepanel extension - Chat with AI with live browser context",
   "type": "module",
