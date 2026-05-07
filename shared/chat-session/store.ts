@@ -1,8 +1,8 @@
 import type { ChatMessage, ChatSession, ContextEvent, SessionId } from '../../shared/chat-session/types';
 
-const SESSIONS_KEY = 'ai_assistant_sessions';
-const MESSAGES_KEY = 'ai_assistant_messages';
-const CONTEXT_KEY = 'ai_assistant_context';
+const SESSIONS_KEY = 'njw_xarvis_sessions';
+const MESSAGES_KEY = 'njw_xarvis_messages';
+const CONTEXT_KEY = 'njw_xarvis_context';
 
 const generateId = (prefix: string): string =>
   `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;

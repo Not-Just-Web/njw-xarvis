@@ -1,6 +1,6 @@
-# njw-xarvis: AI Assistant Browser Extension
+# NJW Xarvis: AI Assistant Extension on Browser
 
-A cross-browser AI extension for Chrome, Firefox, and Brave that lets you chat with AI in a browser sidepanel using live page context.
+A cross-browser AI assistant extension for Chrome, Firefox, and Brave that lets you chat with AI in a browser sidepanel using live page context.
 
 **🚀 Live Demo & Backend:** Hosted on Vercel → [njw-xarvis.vercel.app](https://njw-xarvis.vercel.app)
 

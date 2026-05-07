@@ -55,13 +55,13 @@ jobs:
       - name: Create Chromium zip
         run: |
           cd dist/chromium
-          zip -r ../../ai-assistant-chromium.zip .
+          zip -r ../../njw-xarvis-chromium.zip .
           cd ../..
 
       - name: Create Firefox zip
         run: |
           cd dist/firefox
-          zip -r ../../ai-assistant-firefox.zip .
+          zip -r ../../njw-xarvis-firefox.zip .
           cd ../..
 
       - name: Get version from package.json
@@ -87,27 +87,27 @@ jobs:
           tag_name: ${{ steps.version.outputs.tag }}
           name: "Release ${{ steps.version.outputs.version }}"
           files: |
-            ai-assistant-chromium.zip
-            ai-assistant-firefox.zip
+            njw-xarvis-chromium.zip
+            njw-xarvis-firefox.zip
           body: |
-            ## 🚀 AI Assistant Extension v${{ steps.version.outputs.version }}
+            ## 🚀 NJW Xarvis v${{ steps.version.outputs.version }}
 
             ### 📦 Available Downloads
 
-            - **Chromium** (Chrome, Brave, Edge): `ai-assistant-chromium.zip`
-            - **Firefox**: `ai-assistant-firefox.zip`
+            - **Chromium** (Chrome, Brave, Edge): `njw-xarvis-chromium.zip`
+            - **Firefox**: `njw-xarvis-firefox.zip`
 
             ### 📥 Installation Instructions
 
             #### Chrome / Brave / Edge
-            1. Download `ai-assistant-chromium.zip` and extract it
+            1. Download `njw-xarvis-chromium.zip` and extract it
             2. Go to `chrome://extensions/` (or `brave://extensions/`, `edge://extensions/`)
             3. Enable "Developer mode" (top right)
             4. Click "Load unpacked"
             5. Select the extracted folder
 
             #### Firefox
-            1. Download `ai-assistant-firefox.zip` and extract it
+            1. Download `njw-xarvis-firefox.zip` and extract it
             2. Go to `about:debugging#/runtime/this-firefox`
             3. Click "Load Temporary Add-on"
             4. Select the extracted folder or the manifest file

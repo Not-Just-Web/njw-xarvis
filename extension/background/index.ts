@@ -4,7 +4,7 @@ import { registerContextMenus } from '../context-menu/register';
 import { handleContextMenuClick } from '../context-menu/handlers';
 
 chrome.runtime.onInstalled.addListener(() => {
-  console.info('AI Assistant extension installed');
+  console.info('NJW Xarvis extension installed');
   registerContextMenus();
 });
 
