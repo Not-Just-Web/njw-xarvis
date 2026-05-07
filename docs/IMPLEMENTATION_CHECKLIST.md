@@ -178,17 +178,17 @@ Definition of done:
 
 ## Phase 4: Context Menu Quick Actions
 ### Chunk 4.1 Menu registration
-- [ ] Register context menu actions on extension install/start.
-- [ ] Support open chat, send selected text, send page URL.
+- [x] Register context menu actions on extension install/start.
+- [x] Support open chat, send selected text, send page URL.
 
 Suggested files:
 - extension/context-menu/register.ts
 - extension/background/startup.ts
 
 ### Chunk 4.2 Immediate handoff flow
-- [ ] Open sidepanel from context menu.
-- [ ] Create or use active session.
-- [ ] Inject context event and optional immediate send.
+- [x] Open sidepanel from context menu.
+- [x] Create or use active session.
+- [x] Inject context event and optional immediate send.
 
 Suggested files:
 - extension/context-menu/handlers.ts

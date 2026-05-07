@@ -10,14 +10,14 @@ Owner: AI coding agent
 - Phase 1 Core Runtime Wiring: Completed
 - Phase 2 Context Capture: Completed
 - Phase 3 Sidepanel Chat Experience: Completed
-- Phase 4 Context Menu Quick Actions: Not started
+- Phase 4 Context Menu Quick Actions: Completed
 - Phase 5 Provider Integrations: Not started
 - Phase 6 Connector and Authentication: Not started
 - Phase 7 Compliance, Hardening, and Release: Not started
 
 ## Active Chunk
-- Chunk: 4.1 Context menu registration
-- Branch: feature/phase-4-context-menu
+- Chunk: 5.1 Gemini adapter
+- Branch: feature/phase-5-provider-integrations
 - Status: Ready to start
 - Blockers: None
 
@@ -34,8 +34,8 @@ Reference: docs/IMPLEMENTATION_CHECKLIST.md
 - [x] 3.1 Sidepanel shell and chat stream
 - [x] 3.2 Session lifecycle
 - [x] 3.3 Context timeline
-- [ ] 4.1 Menu registration
-- [ ] 4.2 Immediate handoff flow
+- [x] 4.1 Menu registration
+- [x] 4.2 Immediate handoff flow
 - [ ] 5.1 Gemini adapter
 - [ ] 5.2 Claude adapter
 - [ ] 5.3 ChatGPT adapter
@@ -61,6 +61,7 @@ Use one line per update.
 | 2026-05-07 | 1.2 Popup launcher | Completed | Implemented popup provider selector, status view, and sidepanel open action with React UI | Working tree |
 | 2026-05-07 | 2.1 URL capture + selection | Completed | Added content-script URL/text capture, element picker with overlay, screenshot capture, context normalizer with truncation guard | feature/phase-2-context-capture |
 | 2026-05-07 | 3.1-3.3 Sidepanel chat | Completed | Session store (create/list/resume/archive), full chat UI with drag-drop/paste image, slash-skill autocomplete, hamburger session toggle, Enter-to-send, context chips | feature/phase-3-sidepanel-chat |
+| 2026-05-07 | 4.1-4.2 Context menu | Completed | Registered open chat, send selection, send URL, send element context menus; immediate context handoff to sidepanel on click | feature/phase-4-context-menu |
 
 ## Agent Operating Rules
 - Do not start two chunks at once unless explicitly planned in parallel tracks.
