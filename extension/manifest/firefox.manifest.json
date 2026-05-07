@@ -1,18 +1,18 @@
 {
   "manifest_version": 2,
-  "name": "njw-xarvis",
+  "name": "NJW Xarvis",
   "version": "0.2.0",
-  "description": "njw-xarvis: Sidepanel AI chat with browser context capture.",
+  "description": "NJW Xarvis: AI assistant sidepanel with browser context capture.",
   "permissions": ["storage", "activeTab", "tabs", "contextMenus", "<all_urls>"],
   "browser_action": {
-    "default_title": "njw-xarvis",
+    "default_title": "NJW Xarvis",
     "default_popup": "extension/popup.html"
   },
   "background": {
     "scripts": ["background.js"]
   },
   "sidebar_action": {
-    "default_title": "njw-xarvis",
+    "default_title": "NJW Xarvis",
     "default_panel": "extension/sidepanel.html"
   },
   "content_scripts": [

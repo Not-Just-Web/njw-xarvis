@@ -61,7 +61,7 @@ declare global {
 
 if (!process.env.VERCEL) {
   app.listen(PORT, () => {
-    console.log(`🚀 njw-xarvis Connector API running on http://localhost:${PORT}`);
+    console.log(`🚀 NJW Xarvis Connector API running on http://localhost:${PORT}`);
     console.log(`📋 Health check: http://localhost:${PORT}/health`);
     console.log(`🔐 Allowed origins: ${process.env.ALLOWED_ORIGINS || 'chrome-extension://* (default)'}`);
   });

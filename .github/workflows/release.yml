@@ -90,7 +90,7 @@ jobs:
             njw-xarvis-chromium.zip
             njw-xarvis-firefox.zip
           body: |
-            ## 🚀 njw-xarvis v${{ steps.version.outputs.version }}
+            ## 🚀 NJW Xarvis v${{ steps.version.outputs.version }}
 
             ### 📦 Available Downloads
 
