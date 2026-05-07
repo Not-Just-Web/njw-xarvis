@@ -10,12 +10,24 @@
   },
   "scripts": {
     "dev": "cross-env TARGET=chromium vite build --watch",
+    "dev:api": "cd connector-api && npm run dev",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:api\"",
     "build:chromium": "cross-env TARGET=chromium vite build",
     "build:firefox": "cross-env TARGET=firefox vite build",
     "build": "npm run build:chromium && npm run build:firefox",
+    "build:all": "npm run build && cd connector-api && npm run build",
+    "build:api": "cd connector-api && npm run build",
     "typecheck": "tsc --noEmit",
+    "typecheck:api": "cd connector-api && npm run typecheck",
+    "typecheck:all": "npm run typecheck && npm run typecheck:api",
     "lint": "eslint .",
-    "test": "vitest run"
+    "lint:api": "cd connector-api && npm run lint",
+    "lint:all": "npm run lint && npm run lint:api",
+    "test": "vitest run",
+    "test:api": "cd connector-api && npm run test",
+    "test:all": "npm run test && npm run test:api",
+    "validate:all": "npm run typecheck:all && npm run lint:all && npm run test:all && npm run build:all",
+    "setup": "npm ci && cd connector-api && npm ci && cd .."
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -29,6 +41,7 @@
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
     "@vitejs/plugin-react": "^4.4.1",
+    "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "eslint": "^9.26.0",
     "typescript": "^5.8.3",

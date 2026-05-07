@@ -1,0 +1,35 @@
+{
+  "buildCommand": "npm run build:api",
+  "outputDirectory": "connector-api/dist",
+  "installCommand": "npm ci && cd connector-api && npm ci",
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": "3001"
+  },
+  "envPrefix": "VITE_",
+  "functions": {
+    "connector-api/src/index.ts": {
+      "runtime": "nodejs20.x",
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  },
+  "routes": [
+    {
+      "src": "/health",
+      "dest": "connector-api/src/index.ts"
+    },
+    {
+      "src": "/auth/(.*)",
+      "dest": "connector-api/src/index.ts"
+    },
+    {
+      "src": "/provider/(.*)",
+      "dest": "connector-api/src/index.ts"
+    },
+    {
+      "src": "/(.*)",
+      "status": 404
+    }
+  ]
+}

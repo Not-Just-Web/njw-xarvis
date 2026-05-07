@@ -61,6 +61,111 @@ yarn test
 yarn build
 ```
 
+## Dual Development: Extension + Connector API
+
+This project includes an optional backend connector API for secure credential handling and provider proxying.
+
+### Setup Both Extension and API
+
+```bash
+# Install all dependencies (extension + connector-api)
+npm run setup
+
+# Run extension and API together in one command
+npm run dev:all
+
+# OR run separately:
+# Terminal 1: Extension (Chromium target)
+npm run dev
+
+# Terminal 2: Connector API
+npm run dev:api
+```
+
+### Build Everything
+
+```bash
+# Full build and validation (both extension and connector API)
+npm run validate:all
+
+# Or individually:
+npm run build:all          # Build both
+npm run typecheck:all      # Type check both
+npm run lint:all           # Lint both
+npm run test:all           # Test both
+```
+
+## Production Deployment
+
+### Option 1: Local Development (Recommended for Testing)
+
+The extension uses `http://localhost:3001` by default. Simply run both locally:
+
+```bash
+npm run dev:all
+```
+
+### Option 2: Vercel-Hosted Connector API
+
+Deploy the connector API to Vercel for production use:
+
+#### 1. Prepare Deployment
+
+```bash
+# Create .env file for your Vercel URL
+echo "VITE_CONNECTOR_API_URL=https://your-project-name.vercel.app" > .env
+
+# Build extension with Vercel URL
+npm run build:chromium
+npm run build:firefox
+```
+
+#### 2. Deploy Connector API to Vercel
+
+1. Push this repository to GitHub
+2. Go to [https://vercel.com](https://vercel.com) and sign in with GitHub
+3. Click "New Project"
+4. Select this GitHub repository
+5. Configure environment variables:
+   - `JWT_SECRET`: Generate a strong secret: `openssl rand -base64 32`
+   - `ALLOWED_ORIGINS`: `chrome-extension://*,moz-extension://*`
+6. Click "Deploy"
+7. Copy your Vercel URL (e.g., `https://your-project-name.vercel.app`)
+
+#### 3. Update Extension Build
+
+```bash
+# Update environment variable with your Vercel URL
+echo "VITE_CONNECTOR_API_URL=https://your-project-name.vercel.app" > .env
+
+# Rebuild extension to include Vercel endpoint
+npm run build:chromium
+npm run build:firefox
+```
+
+#### 4. Extension Auto-Connects
+
+The extension automatically connects to the API configured at build time. No additional setup needed.
+
+### Verify Deployment
+
+```bash
+# Test local API
+curl http://localhost:3001/health
+
+# Test Vercel API
+curl https://your-project-name.vercel.app/health
+```
+
+Expected response:
+```json
+{
+  "status": "ok",
+  "version": "1.0.0",
+  "timestamp": "2026-05-07T12:00:00Z"
+}
+```
+
 ## Bun Alternative
 ```bash
 bun install
