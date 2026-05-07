@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { providerRegistry } from '../shared/provider-contract/registry';
-import type { ProviderAdapter } from '../shared/provider-contract/types';
+import type { ProviderAdapter, ProviderId } from '../shared/provider-contract/types';
 
 describe('Provider Registry', () => {
   it('should list all registered providers', () => {
@@ -20,14 +20,16 @@ describe('Provider Registry', () => {
   });
 
   it('should return undefined for unknown provider', () => {
-    const unknown = providerRegistry.get('unknown' as any);
+    const unknownId = 'unknown' as ProviderId;
+    const unknown = providerRegistry.get(unknownId);
 
     expect(unknown).toBeUndefined();
   });
 
   it('should check if provider exists', () => {
     expect(providerRegistry.has('gemini')).toBe(true);
-    expect(providerRegistry.has('unknown' as any)).toBe(false);
+    const unknownId = 'unknown' as ProviderId;
+    expect(providerRegistry.has(unknownId)).toBe(false);
   });
 
   it('should set and get auth config', () => {
@@ -46,14 +48,16 @@ describe('Provider Registry', () => {
   });
 
   it('should return false for unknown provider authentication', async () => {
-    const result = await providerRegistry.authenticate('unknown' as any);
+    const unknownId = 'unknown' as ProviderId;
+    const result = await providerRegistry.authenticate(unknownId);
 
     expect(result).toBe(false);
   });
 
   it('should register custom provider', () => {
+    const customId = 'custom:test-provider' as ProviderId;
     const customAdapter: ProviderAdapter = {
-      id: 'custom:test-provider' as any,
+      id: customId,
       displayName: 'Test Provider',
       supports: { vision: false, tools: false, maxContextBytes: 50000 },
       async authenticate() {
@@ -66,8 +70,8 @@ describe('Provider Registry', () => {
 
     providerRegistry.register(customAdapter);
 
-    expect(providerRegistry.has('custom:test-provider' as any)).toBe(true);
-    expect(providerRegistry.get('custom:test-provider' as any)).toBeDefined();
+    expect(providerRegistry.has(customId)).toBe(true);
+    expect(providerRegistry.get(customId)).toBeDefined();
   });
 
   it('should track auth for multiple providers', () => {

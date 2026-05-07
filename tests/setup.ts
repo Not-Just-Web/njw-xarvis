@@ -82,19 +82,22 @@ export const createMockResult = (override: Partial<ProviderSendResult> = {}): Pr
 // Mock session factory
 export const createMockSession = (override: Partial<ChatSession> = {}): ChatSession => ({
   id: 'session-123',
-  createdAt: Date.now(),
-  name: 'Test Session',
-  messages: [],
-  contextEvents: [],
+  title: 'Test Session',
+  providerId: 'gemini',
   archived: false,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
   ...override
 });
 
 // Mock context event factory
 export const createMockContextEvent = (override: Partial<ContextEvent> = {}): ContextEvent => ({
+  id: 'event-123',
+  sessionId: 'session-123',
   type: 'url',
-  timestamp: Date.now(),
-  data: 'https://example.com',
+  label: 'Page URL',
+  payload: 'https://example.com',
+  createdAt: new Date().toISOString(),
   ...override
 });
 

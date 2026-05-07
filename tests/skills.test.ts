@@ -61,10 +61,15 @@ describe('Skills', () => {
     });
 
     it('should handle non-string inputs safely', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(isDefaultSkill(null as any)).toBe(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(isDefaultSkill(undefined as any)).toBe(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(isDefaultSkill(123 as any)).toBe(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(isDefaultSkill({} as any)).toBe(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(isDefaultSkill([] as any)).toBe(false);
     });
   });
