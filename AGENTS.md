@@ -120,6 +120,26 @@ Phase 5: Extensibility
 
 If command names differ after scaffolding, update this file immediately.
 
+## GitHub Repository Secrets
+
+The following secrets must be configured for CI/CD to work properly:
+
+### CHROME_CRX_PRIVATE_KEY
+- **Purpose**: Sign Chrome extension packages for release
+- **Format**: Base64-encoded 2048-bit RSA private key
+- **Setup** (one-time):
+  ```bash
+  openssl genrsa -out chrome-extension-key.pem 2048
+  cat chrome-extension-key.pem | base64 | gh secret set CHROME_CRX_PRIVATE_KEY --repo Not-Just-Web/njw-xarvis
+  ```
+- **Location**: https://github.com/Not-Just-Web/njw-xarvis/settings/secrets/actions
+- **Used by**: `.github/workflows/release.yml` (generates signed `.crx` files for download)
+- **When needed**: Every new release needs this to generate installable Chrome extensions
+
+### Future Secrets (not yet required)
+- `WEBSTORE_API_KEY`: For Chrome Web Store distribution
+- `FIREFOX_API_KEY`: For Firefox Add-ons distribution
+
 ## What to Update Next
 Primary implementation docs:
 - [Architecture](docs/ARCHITECTURE.md)
