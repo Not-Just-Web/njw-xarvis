@@ -8,6 +8,9 @@ Purpose: define a stable architecture for a cross-browser AI assistant extension
 - Support multiple AI providers (Gemini, Claude, ChatGPT) with provider switching.
 - Persist chat sessions with resume and new session flows.
 - Allow future provider plugins without refactoring core modules.
+- Support default slash skills in chat: /screenshot, /select-element, /test-section, /test-feature.
+- Support one-click current-tab screenshot and drag-drop/paste image in composer.
+- Support Enter-to-send and Shift+Enter-for-newline message behavior.
 
 ## 2) Non-Goals (Phase 1)
 - No mobile browser extension support.
@@ -121,12 +124,14 @@ Purpose: define a stable architecture for a cross-browser AI assistant extension
 
 ## 9) Sidepanel UX Requirements
 - Fast first paint and responsive layout.
-- Distinct message styles for user and assistant.
+- Messenger-style message bubbles: assistant on left, user on right.
 - Streaming text rendering with cancel and retry.
 - Session list with last-updated sorting and search.
 - Resume session, create new session, and per-session context timeline.
 - Context chip remove and inspect before send.
 - Clear connection and provider status badges.
+- Include slash-skill suggestions and quick insert actions.
+- Keep composer anchored with one-click screenshot and drag-drop image affordance.
 
 ## 10) Browser Compatibility Notes
 - Base APIs: WebExtensions-compatible APIs.

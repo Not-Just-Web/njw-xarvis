@@ -60,11 +60,14 @@ Provider contract (minimum):
 ## UX Rules
 - Must work on desktop widths >= 320px in popup.
 - Sidepanel chat is the primary interaction surface and should feel polished and modern.
+- Sidepanel message UI should use modern messenger-style bubbles (assistant left, user right).
 - Show provider status: connected/disconnected/error.
 - Preview what context will be sent before submit.
 - Keep provider switching stateful but isolated (no cross-provider message leakage).
 - Support session management: create new chat, resume past chat, and view per-session context history.
 - Add context chips in the composer (URL, element, screenshot) with remove/inspect actions before send.
+- Composer must support one-click current-tab screenshot, drag-drop/paste image, Enter-to-send, and Shift+Enter newline.
+- Provide default slash skills: /screenshot, /select-element, /test-section, /test-feature.
 - Provide right-click quick actions: open AI chat, send selected text, send element snapshot, send page URL.
 
 ## Build Plan (implementation phases)

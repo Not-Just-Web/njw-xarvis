@@ -92,6 +92,8 @@ Suggested files:
 - [ ] Capture visible tab screenshot.
 - [ ] Compress and size-bound image payload.
 - [ ] Attach screenshot context chip with preview.
+- [ ] Add one-click current-tab screenshot action in composer toolbar.
+- [ ] Support drag-drop and paste image into composer.
 
 Suggested files:
 - extension/capture/screenshot.ts
@@ -106,6 +108,9 @@ Definition of done:
 - [ ] Build sidepanel layout: session list, message pane, composer.
 - [ ] Implement streaming assistant output rendering.
 - [ ] Add send, stop, retry actions.
+- [ ] Implement messenger-style bubble layout (assistant left, user right).
+- [ ] Implement Enter-to-send and Shift+Enter-newline behavior.
+- [ ] Add slash-skill autocomplete for /screenshot, /select-element, /test-section, /test-feature.
 
 Suggested files:
 - extension/sidepanel/App.tsx
@@ -140,6 +145,7 @@ Suggested files:
 
 Definition of done:
 - User can create/resume sessions and inspect past context events.
+- Sidepanel UX is responsive and usable at 360px+ width.
 
 ## Phase 4: Context Menu Quick Actions
 ### Chunk 4.1 Menu registration

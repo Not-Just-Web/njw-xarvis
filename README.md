@@ -6,11 +6,21 @@ A cross-browser AI extension for Chrome, Firefox, and Brave that lets you chat w
 
 ## What It Does
 - Opens a beautiful sidepanel chat in-browser.
+- Uses modern messenger-style chat bubbles (assistant left, user right).
 - Captures and sends context:
   - Current page URL
   - Selected text
   - Selected element snapshot (selector, text, metadata)
-  - Screenshot
+  - Screenshot (one-click capture of current tab)
+  - Drag-and-drop or paste image into chat
+- Includes default slash skills:
+  - /screenshot
+  - /select-element
+  - /test-section
+  - /test-feature
+- Chat composer behavior:
+  - Enter sends message
+  - Shift+Enter creates a new line
 - Supports multiple AI providers:
   - Gemini
   - Claude
@@ -25,6 +35,15 @@ A cross-browser AI extension for Chrome, Firefox, and Brave that lets you chat w
   - Send selected text immediately
   - Send page URL immediately
   - Send selected element snapshot
+
+## Wireframes and Design Direction
+- Browser-first layout: current tab stays on the left, AI chat sidepanel on the right.
+- Sidepanel uses simple background colors and WhatsApp/Messenger-style bubble flow.
+- Context chips and capture controls are kept near the composer for fast testing loops.
+
+![Sidepanel Wireframe](docs/assets/wireframe-sidepanel.svg)
+![Context Capture Wireframe](docs/assets/wireframe-context-capture.svg)
+![UAT QA Wireframe](docs/assets/wireframe-uat-qa.svg)
 
 ## Workflow Overview
 ```mermaid
