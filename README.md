@@ -2,6 +2,8 @@
 
 A cross-browser AI extension for Chrome, Firefox, and Brave that lets you chat with AI in a browser sidepanel using live page context.
 
+**🚀 Live Demo & Backend:** Hosted on Vercel → [njw-xarvis.vercel.app](https://njw-xarvis.vercel.app)
+
 ![AI Sidepanel Hero](docs/assets/sidepanel-hero.svg)
 
 ## What It Does
@@ -60,6 +62,22 @@ yarn lint
 yarn test
 yarn build
 ```
+
+## Architecture & Deployment
+
+### Single Vercel Domain
+
+All services deployed on one Vercel domain: **njw-xarvis.vercel.app**
+
+```
+https://njw-xarvis.vercel.app/
+├── /                    → Landing page with extension preview
+└── /api/*               → Connector API endpoints
+```
+
+**Extension:** Builds locally and loads into browser (Chrome/Firefox/Brave)  
+**Connector API:** Deployed on Vercel at `/api` path  
+**Communication:** Extension uses relative `/api` path (auto-connects at build time)
 
 ## Dual Development: Extension + Connector API
 
