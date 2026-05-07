@@ -130,14 +130,14 @@ Deploy everything to one Vercel project: **njw-xarvis**
 3. Click "New Project"
 4. Select this GitHub repository (njw-xarvis)
 5. Vercel will automatically detect `vercel.json` configuration
-6. **Set Required Environment Variables:**
-   - Click "Environment Variables"
-   - Add `JWT_SECRET`: Generate a strong secret with `openssl rand -base64 32`
+6. **Set Required Secrets in Vercel Dashboard:**
+   - Go to your Vercel project settings → "Environment Variables"
+   - Add `JWT_SECRET` as a secret: Generate with `openssl rand -base64 32`
      ```bash
      openssl rand -base64 32
-     # Copy the output and paste into Vercel Dashboard
+     # Copy the output and paste as JWT_SECRET value in Vercel UI
      ```
-   - Other variables (`NODE_ENV`, `ALLOWED_ORIGINS`) are pre-configured
+   - Vercel automatically makes secrets available at build time and runtime
 7. Click "Deploy"
 
 The connector API will be automatically built and deployed at `https://njw-xarvis.vercel.app/api/`.
