@@ -229,4 +229,4 @@ Using bun for the same commands:
 - Release checklist: [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md)
 
 ## License
-Add your preferred license file before public release.
+[MIT License](LICENSE) © 2026 [Not Just Web](https://github.com/Not-Just-Web)
