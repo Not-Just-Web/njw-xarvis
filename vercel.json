@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd connector-api && npm install && npm run build",
+  "buildCommand": "cd connector-api && npm run build",
   "outputDirectory": "connector-api/dist",
-  "installCommand": "yarn install && cd connector-api && npm ci",
+  "installCommand": "yarn install && cd connector-api && npm install",
   "env": {
     "NODE_ENV": "production",
     "JWT_SECRET": "@jwt_secret",

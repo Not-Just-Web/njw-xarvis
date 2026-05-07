@@ -23,7 +23,7 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
-        run: yarn install && cd connector-api && npm ci
+        run: yarn install && cd connector-api && npm install
 
       - name: Typecheck (extension + connector-api)
         run: yarn typecheck:all
