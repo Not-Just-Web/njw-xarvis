@@ -47,9 +47,11 @@ router.post('/token', async (req: Request, res: Response) => {
       provider: providerId,
       message: 'Token granted successfully'
     });
+    return;
   } catch (error) {
     console.error(`[${req.id}] Auth token error:`, error);
     res.status(500).json({ error: 'Failed to generate token' });
+    return;
   }
 });
 
@@ -74,8 +76,10 @@ router.post('/validate', (req: Request, res: Response) => {
     }
 
     res.json({ valid: true, provider: providerId, message: 'Token is valid' });
+    return;
   } catch (error) {
     res.status(401).json({ valid: false, error: 'Invalid token' });
+    return;
   }
 });
 
@@ -111,8 +115,10 @@ router.post('/refresh', (req: Request, res: Response) => {
       provider: providerId,
       message: 'Token refreshed successfully'
     });
+    return;
   } catch (error) {
     res.status(401).json({ error: 'Failed to refresh token' });
+    return;
   }
 });
 
@@ -135,9 +141,11 @@ router.post('/revoke', (req: Request, res: Response) => {
     }
 
     res.json({ revoked: true, provider: providerId, message: 'Token revoked successfully' });
+    return;
   } catch (error) {
     console.error(`[${req.id}] Revoke error:`, error);
     res.status(500).json({ error: 'Failed to revoke token' });
+    return;
   }
 });
 

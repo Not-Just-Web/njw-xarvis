@@ -11,11 +11,12 @@ const providerKeys = new Map<string, Map<string, string>>();
 /**
  * Middleware: Verify JWT token and extract provider info
  */
-function verifyToken(req: Request, res: Response, next: Function) {
+function verifyToken(req: Request, res: Response, next: Function): void {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'Missing or invalid authorization header' });
+      res.status(401).json({ error: 'Missing or invalid authorization header' });
+      return;
     }
 
     const token = authHeader.substring(7);
@@ -50,10 +51,12 @@ router.post('/message', verifyToken, async (req: Request, res: Response) => {
     // Proxy request to appropriate provider
     const response = await proxyToProvider(providerId, apiKey, payload);
     res.json(response);
+    return;
   } catch (error) {
     console.error(`[${req.id}] Provider proxy error:`, error);
     const errorMessage = error instanceof Error ? error.message : 'Provider request failed';
     res.status(500).json({ error: errorMessage });
+    return;
   }
 });
 
@@ -89,6 +92,10 @@ router.get('/health', async (req: Request, res: Response) => {
 router.get('/:providerId/health', async (req: Request, res: Response) => {
   try {
     const { providerId } = req.params;
+    if (!providerId) {
+      res.status(400).json({ error: 'providerId is required' });
+      return;
+    }
     const isHealthy = await checkProviderHealth(providerId);
 
     res.json({
