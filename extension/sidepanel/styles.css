@@ -84,6 +84,26 @@ body,
   background: #ffffff;
 }
 
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hamburger {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: var(--muted);
+}
+
+.hamburger:hover {
+  background: var(--chip);
+}
+
 .eyebrow {
   margin: 0;
   font-size: 11px;
@@ -144,15 +164,53 @@ h1 {
 
 .chips {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
-.chips span {
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   padding: 4px 9px;
   border-radius: 999px;
   background: var(--chip);
   border: 1px solid var(--line);
   font-size: 12px;
+}
+
+.chip button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--muted);
+  padding: 0 2px;
+}
+
+.capture-bar {
+  display: flex;
+  gap: 6px;
+}
+
+.capture-bar button {
+  border: 1px solid var(--line);
+  background: var(--chip);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.capture-bar button:hover {
+  background: #e0e5f7;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 24px;
 }
 
 .skills {
