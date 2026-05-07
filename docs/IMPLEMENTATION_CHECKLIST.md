@@ -133,13 +133,13 @@ Definition of done:
 
 ## Phase 3: Sidepanel Chat Experience
 ### Chunk 3.1 Sidepanel shell and chat stream
-- [ ] Build sidepanel layout: session list, message pane, composer.
-- [ ] Implement streaming assistant output rendering.
-- [ ] Add send, stop, retry actions.
-- [ ] Implement messenger-style bubble layout (assistant left, user right).
-- [ ] Implement Enter-to-send and Shift+Enter-newline behavior.
-- [ ] Add slash-skill autocomplete for /screenshot, /select-element, /test-section, /test-feature.
-- [ ] Implement collapsible/expandable session drawer inside sidepanel.
+- [x] Build sidepanel layout: session list, message pane, composer.
+- [x] Implement streaming assistant output rendering.
+- [x] Add send, stop, retry actions.
+- [x] Implement messenger-style bubble layout (assistant left, user right).
+- [x] Implement Enter-to-send and Shift+Enter-newline behavior.
+- [x] Add slash-skill autocomplete for /screenshot, /select-element, /test-section, /test-feature.
+- [x] Implement collapsible/expandable session drawer inside sidepanel.
 
 Suggested files:
 - extension/sidepanel/App.tsx
@@ -148,9 +148,9 @@ Suggested files:
 - extension/sidepanel/components/Composer.tsx
 
 ### Chunk 3.2 Session lifecycle
-- [ ] Create new session action.
-- [ ] Resume prior session action.
-- [ ] Rename and archive session actions.
+- [x] Create new session action.
+- [x] Resume prior session action.
+- [x] Rename and archive session actions.
 
 Suggested files:
 - shared/chat-session/store.ts
@@ -165,8 +165,8 @@ Interfaces to implement:
 - archiveSession(sessionId)
 
 ### Chunk 3.3 Context timeline
-- [ ] Render per-session context timeline.
-- [ ] Link messages to context events where applicable.
+- [x] Render per-session context timeline.
+- [x] Link messages to context events where applicable.
 
 Suggested files:
 - extension/sidepanel/components/ContextTimeline.tsx
