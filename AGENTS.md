@@ -120,6 +120,50 @@ Phase 5: Extensibility
 
 If command names differ after scaffolding, update this file immediately.
 
+## GitHub Repository Secrets
+
+The following secrets are configured in GitHub Actions for CI/CD workflows.
+
+### Required Secrets (Currently Configured)
+
+#### CHROME_CRX_PRIVATE_KEY ✅ Configured
+- **Purpose**: Sign Chrome extension packages for release
+- **Format**: Base64-encoded 2048-bit RSA private key
+- **Setup** (one-time):
+  ```bash
+  openssl genrsa -out chrome-extension-key.pem 2048
+  cat chrome-extension-key.pem | base64 | gh secret set CHROME_CRX_PRIVATE_KEY --repo Not-Just-Web/njw-xarvis
+  ```
+- **Location**: https://github.com/Not-Just-Web/njw-xarvis/settings/secrets/actions
+- **Used by**: `.github/workflows/release.yml` (generates signed `.crx` files for download)
+- **When needed**: Every new release needs this to generate installable Chrome extensions
+
+### Optional Secrets for Future Features
+
+#### CHROME_EXTENSION_CLIENT_ID (Future - Store Submission)
+- **Purpose**: Publish extensions to Chrome Web Store
+- **Setup**: Follow [docs/CHROME_STORE_SETUP.md](docs/CHROME_STORE_SETUP.md) for step-by-step instructions
+- **Used by**: `.github/workflows/publish-chrome.yml`
+- **When needed**: When ready to publish to Chrome Web Store
+- **Related secrets**: Also need `CHROME_EXTENSION_CLIENT_SECRET`, `CHROME_EXTENSION_REFRESH_TOKEN`, `CHROME_EXTENSION_ID`
+- **Helper script**: Run `./scripts/setup-chrome-store-secrets.sh` to interactively set all 4 secrets at once
+
+#### FIREFOX_API_JWT_ISSUER (Future - Store Submission)
+- **Purpose**: Publish extensions to Firefox Add-ons
+- **Setup**: Obtain from Mozilla Developer Hub
+- **When needed**: When ready to publish to Firefox Add-ons
+
+### Vercel Environment Variables (Not GitHub Secrets)
+
+These are set directly in Vercel dashboard, not as GitHub Actions secrets:
+- **JWT_SECRET**: Strong random key for connector API (required at runtime on Vercel)
+  - Generate: `openssl rand -base64 32`
+  - Set in Vercel dashboard → Project → Environment Variables
+- **NODE_ENV**: Set to `production` in Vercel
+- **ALLOWED_ORIGINS**: Already in `vercel.json` as `chrome-extension://*,moz-extension://*`
+
+**Note**: The release workflow uses `GITHUB_TOKEN` (auto-provided by GitHub Actions) to create releases.
+
 ## What to Update Next
 Primary implementation docs:
 - [Architecture](docs/ARCHITECTURE.md)

@@ -1,17 +1,52 @@
 name: Publish Chrome Extension
 
-# DISABLED: This workflow is disabled until extension is complete and ready for store submission
-# Will be re-enabled for final release publishing
+# Triggered manually or on push to main.
+# Skips the publish step automatically if Chrome Web Store secrets are not configured.
+# Required secrets (set in GitHub → Settings → Secrets → Actions):
+#   CHROME_EXTENSION_CLIENT_ID      — OAuth2 client ID from Google Cloud Console
+#   CHROME_EXTENSION_CLIENT_SECRET  — OAuth2 client secret from Google Cloud Console
+#   CHROME_EXTENSION_REFRESH_TOKEN  — OAuth2 refresh token (see docs/CHROME_STORE_SETUP.md)
+#   CHROME_EXTENSION_ID             — Extension ID from Chrome Web Store developer dashboard
+#
+# See docs/CHROME_STORE_SETUP.md for step-by-step setup instructions.
 on:
-  workflow_dispatch: # Manual trigger only - no automatic pushes
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
+  check-secrets:
+    name: Check Chrome Store Secrets
+    runs-on: ubuntu-latest
+    outputs:
+      secrets_configured: ${{ steps.check.outputs.configured }}
+    steps:
+      - name: Detect if Chrome Web Store secrets are configured
+        id: check
+        env:
+          CLIENT_ID: ${{ secrets.CHROME_EXTENSION_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CHROME_EXTENSION_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CHROME_EXTENSION_REFRESH_TOKEN }}
+          EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+        run: |
+          if [[ -n "$CLIENT_ID" && -n "$CLIENT_SECRET" && -n "$REFRESH_TOKEN" && -n "$EXTENSION_ID" ]]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+            echo "✅ All Chrome Web Store secrets are configured — publish will run."
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "⏭️  One or more Chrome Web Store secrets are missing — publish step will be skipped."
+            echo "   Set CHROME_EXTENSION_CLIENT_ID, CHROME_EXTENSION_CLIENT_SECRET,"
+            echo "   CHROME_EXTENSION_REFRESH_TOKEN, and CHROME_EXTENSION_ID in GitHub secrets."
+            echo "   See docs/CHROME_STORE_SETUP.md for instructions."
+          fi
+
   build-and-package:
     name: Build and Package
     runs-on: ubuntu-latest
+    needs: check-secrets
     outputs:
       zip_path: ${{ steps.package.outputs.zip_path }}
     steps:
@@ -51,8 +86,8 @@ jobs:
   publish:
     name: Publish to Chrome Web Store
     runs-on: ubuntu-latest
-    needs: build-and-package
-    if: ${{ github.ref == 'refs/heads/main' }}
+    needs: [check-secrets, build-and-package]
+    if: ${{ needs.check-secrets.outputs.secrets_configured == 'true' && github.ref == 'refs/heads/main' }}
     steps:
       - name: Download package artifact
         uses: actions/download-artifact@v4
