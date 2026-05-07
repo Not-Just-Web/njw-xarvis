@@ -101,3 +101,101 @@ Apply branch protection on main:
 8. **Merge via GitHub UI only** (Squash and merge)
 9. Verify release workflow triggers in GitHub Actions
 10. Confirm release artifacts created (chromium + firefox zips)
+
+## AI Agent Git Operations (REQUIRED FOR AGENTS)
+When running as an AI coding agent, ALWAYS use GitHub MCP (Model Context Protocol) tools for git operations instead of terminal commands. This ensures:
+- Operations are traced in GitHub history
+- PR metadata is correct
+- No accidental direct commits to main
+- Proper error handling and validation
+
+### Agent MCP Tools Reference
+**For PR Operations:**
+- `mcp_io_github_git_create_pull_request` — Create PR from feature branch to main
+  - Parameters: owner, repo, title (with [phase-X] tag), head (feature-branch), base (main), body (description + testing evidence)
+  - Always include: testing validation, docs links, related issue/PR numbers
+- `mcp_io_github_git_update_pull_request` — Update PR title, description, or state
+  - Use when adding test results or updating description after changes
+- `mcp_io_github_git_merge_pull_request` — Merge PR (only after CI passes)
+  - Always use `merge_method: "squash"` for clean history
+  - Only merge if all status checks are green
+
+**For Branch Operations:**
+- `mcp_io_github_git_create_branch` — Create new feature branch from main
+  - Parameters: owner, repo, branch (format: feature/phase-X-name), from_branch (main)
+- `mcp_io_github_git_push_files` — Push multiple files in one commit
+  - Preferred over sequential file creation; more efficient
+  - Use descriptive commit message with [phase-N] tag
+
+**For Code Review & Validation:**
+- `mcp_io_github_git_pull_request_read` — Check PR status, files changed, checks passing
+  - Use before merging to verify all CI checks are green
+  - Use method: "get_status" to check combined commit status
+- `mcp_io_github_git_request_copilot_review` — Request automated code review for PR
+  - Useful before human review to catch issues early
+
+**For File Operations:**
+- `mcp_io_github_git_create_or_update_file` — Create or update single file with commit
+  - Use for single-file changes (docs, config)
+  - Always provide sha for updates to existing files
+
+### Example Agent Workflow
+```yaml
+Task: Implement feature and get it to main
+
+1. Create Feature Branch
+   - Use: mcp_io_github_git_create_branch
+   - branch: "feature/phase-6-auth-ui"
+   - from_branch: "main"
+
+2. Make Code Changes Locally
+   - Edit files in workspace
+   - Run: yarn typecheck:all && yarn lint:all && yarn test && yarn build
+
+3. Push Changes to GitHub
+   - Use: mcp_io_github_git_push_files
+   - branch: "feature/phase-6-auth-ui"
+   - files: [all modified files with content]
+   - message: "[phase-6] Implement auth UI screens with token management"
+
+4. Create Pull Request
+   - Use: mcp_io_github_git_create_pull_request
+   - title: "[phase-6] Auth UI Screens + Token Management"
+   - body: Include feature summary, test evidence, docs links
+   - head: "feature/phase-6-auth-ui"
+   - base: "main"
+
+5. Wait for CI (via GitHub Actions dashboard or polling)
+   - Check: mcp_io_github_git_pull_request_read (method: "get_status")
+
+6. Merge to Main
+   - Use: mcp_io_github_git_merge_pull_request
+   - merge_method: "squash"
+   - Only call after CI is green
+
+7. Verify Release Workflow
+   - Check GitHub Actions for auto-release triggering
+```
+
+### Terminal Commands (AVOID - USE MCP INSTEAD)
+❌ **NEVER use** terminal for these operations:
+```bash
+git push origin main                    # Forbidden - violates workflow
+git merge feature/branch                # Forbidden - use MCP PR merge
+git commit && git push --force-with-lease  # Forbidden - use MCP push_files
+```
+
+✅ **OK to use terminal only for**:
+- Local validation before pushing: `yarn typecheck:all && yarn lint:all && yarn test && yarn build`
+- Checking local branch status: `git status`, `git log --oneline`
+- Fetching latest main: `git fetch origin main`
+- Switching branches locally: `git checkout feature/branch`
+
+### Key Principles for Agents
+1. **Always prefer MCP over terminal** for any GitHub operation (PR, branch, push, merge)
+2. **Never use terminal** to push directly to main or merge branches
+3. **Always wait for CI** before merging (check PR status via MCP)
+4. **Always include PR metadata**: phase tag, testing evidence, docs links
+5. **Always squash-merge** (not regular merge) for clean history
+6. **Update PROGRESS.md** in PR commits before merge
+7. **Verify release workflow** triggers after main merge (GitHub Actions)
