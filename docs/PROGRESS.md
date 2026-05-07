@@ -2,7 +2,7 @@
 
 Purpose: single source of truth for execution status. Update this file after each merged chunk.
 
-Last updated: 2026-05-07
+Last updated: 2026-05-08
 Owner: AI coding agent
 
 ## Current Phase Summary
@@ -12,12 +12,14 @@ Owner: AI coding agent
 - Phase 3 Sidepanel Chat Experience: Completed
 - Phase 4 Context Menu Quick Actions: Completed
 - Phase 5 Provider Integrations: Completed ✓
-- Phase 6 Connector and Authentication: Not started
-- Phase 7 Compliance, Hardening, and Release: Not started
+- Phase 6 Connector and Authentication: Completed ✓
+- Phase 7 Chrome Web Store Setup & Compliance: In Progress
 
-## Active Chunk
-- Chunk: 6.1 Connector API baseline
-- Branch: feature/phase-6-connector-auth
+## Latest Work
+- Merged PR#15: Add landing page and update README header layout
+- Merged PR#16: Remove problematic CRX generation, keep XPI single-file for Firefox
+- Merged PR#17: Chrome Web Store secrets setup guide and publish workflow gating
+- Verified Phase 6 complete: PRs #6–#9 (connector-api + auth UI) already merged
 - Status: Ready to start
 - Blockers: None
 
