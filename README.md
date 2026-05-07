@@ -97,33 +97,34 @@ npm run test:all           # Test both
 
 ## Production Deployment
 
-### Connector API Only (Recommended)
+### Single Vercel Domain with Multiple Routes
 
-Only the **Connector API** needs to be deployed to Vercel. The **extension builds locally** and loads into your browser.
+Deploy everything to one Vercel project: **njw-xarvis**
+
+- `https://njw-xarvis.vercel.app/` → Landing page with extension preview
+- `https://njw-xarvis.vercel.app/api/*` → Connector API endpoints
 
 #### 1. Deploy Connector API to Vercel
-
-```bash
-# Create .env file with your Vercel URL (after deployment)
-echo "VITE_CONNECTOR_API_URL=https://your-project-name.vercel.app" > .env
-```
 
 **Vercel Deployment Steps:**
 1. Push this repository to GitHub
 2. Go to [https://vercel.com](https://vercel.com) and sign in with GitHub
 3. Click "New Project"
 4. Select this GitHub repository
-5. Configure environment variables:
-   - `JWT_SECRET`: Generate a strong secret: `openssl rand -base64 32`
-   - `ALLOWED_ORIGINS`: `chrome-extension://*,moz-extension://*`
-6. Click "Deploy" — Vercel will automatically build and deploy the connector API
+5. Vercel will automatically detect `vercel.json` with pre-configured environment variables
+6. Add the required secret:
+   - Click "Environment Variables"
+   - Add `JWT_SECRET`: Generate a strong secret with `openssl rand -base64 32`
+   - Other variables (`NODE_ENV`, `PORT`, `ALLOWED_ORIGINS`) are pre-configured
+7. Click "Deploy"
+
+The connector API will be automatically built and deployed at `https://njw-xarvis.vercel.app/api/`.
 
 #### 2. Build Extension Locally
 
 ```bash
-# Update environment with your Vercel URL
-echo "VITE_CONNECTOR_API_URL=https://your-project-name.vercel.app" > .env
-
+# No environment variable needed!
+# Extension automatically uses /api relative path on Vercel
 # Build extension (local only - no deployment needed)
 npm run build:chromium
 npm run build:firefox
@@ -144,13 +145,13 @@ npm run build:firefox
 
 #### 4. Extension Auto-Connects
 
-The extension automatically connects to your Vercel-hosted connector API configured at build time.
+The extension automatically connects to `/api` endpoints on Vercel.
 
 ### Verify Deployment
 
 ```bash
 # Test your Vercel API
-curl https://your-project-name.vercel.app/health
+curl https://njw-xarvis.vercel.app/api/health
 
 # Expected response:
 # {

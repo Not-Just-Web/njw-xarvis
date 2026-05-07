@@ -2,11 +2,13 @@
  * Configuration for Connector API endpoints
  * Extension will use these URLs to communicate with the backend
  * 
- * Environment Variables:
- * - VITE_CONNECTOR_API_URL: Backend connector API URL (default: http://localhost:3001)
- *   Set during build time:
- *   - Dev: VITE_CONNECTOR_API_URL=http://localhost:3001 npm run dev
- *   - Prod: VITE_CONNECTOR_API_URL=https://your-vercel-domain.vercel.app npm run build
+ * Deployment Architecture:
+ * - Extension: Builds locally and loads into browser
+ * - Landing Page: https://njw-xarvis.vercel.app/ (root)
+ * - Connector API: https://njw-xarvis.vercel.app/api/* (relative path)
+ * 
+ * Development: Uses http://localhost:3001 (local connector API)
+ * Production: Uses /api (relative path on same Vercel domain)
  */
 
 declare global {
@@ -19,9 +21,9 @@ declare global {
 }
 
 export const CONNECTOR_API_CONFIG = {
-  // Vercel hosted API (configured at build time)
-  // Falls back to localhost:3001 for local development
-  baseUrl: process.env.VITE_CONNECTOR_API_URL || 'http://localhost:3001',
+  // Production: Uses /api relative path on Vercel
+  // Development: Uses http://localhost:3001
+  baseUrl: process.env.VITE_CONNECTOR_API_URL || '/api',
 
   // API endpoints
   endpoints: {
@@ -53,17 +55,28 @@ export const CONNECTOR_API_CONFIG = {
   },
 
   /**
+   * Get full API URL (handles relative paths on Vercel)
+   */
+  getFullUrl(path: string): string {
+    // If running in browser and baseUrl is relative, construct full URL
+    if (typeof window !== 'undefined' && this.baseUrl.startsWith('/')) {
+      return `${window.location.origin}${this.baseUrl}${path}`;
+    }
+    return this.getUrl(path);
+  },
+
+  /**
    * Get auth token endpoint
    */
   getAuthTokenUrl(): string {
-    return this.getUrl(this.endpoints.auth.token);
+    return this.getFullUrl(this.endpoints.auth.token);
   },
 
   /**
    * Get provider message endpoint
    */
   getProviderMessageUrl(): string {
-    return this.getUrl(this.endpoints.provider.message);
+    return this.getFullUrl(this.endpoints.provider.message);
   }
 };
 

@@ -4,7 +4,9 @@
   "installCommand": "npm ci && cd connector-api && npm ci",
   "env": {
     "NODE_ENV": "production",
-    "PORT": "3001"
+    "PORT": "3001",
+    "JWT_SECRET": "@jwt_secret",
+    "ALLOWED_ORIGINS": "chrome-extension://*,moz-extension://*"
   },
   "envPrefix": "VITE_",
   "functions": {
@@ -16,15 +18,15 @@
   },
   "routes": [
     {
-      "src": "/health",
+      "src": "/api/health",
       "dest": "connector-api/src/index.ts"
     },
     {
-      "src": "/auth/(.*)",
+      "src": "/api/auth/(.*)",
       "dest": "connector-api/src/index.ts"
     },
     {
-      "src": "/provider/(.*)",
+      "src": "/api/provider/(.*)",
       "dest": "connector-api/src/index.ts"
     },
     {
