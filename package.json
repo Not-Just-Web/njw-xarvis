@@ -4,6 +4,10 @@
   "private": true,
   "description": "Cross-browser AI assistant extension built with React and TypeScript",
   "type": "module",
+  "packageManager": "yarn@4.12.0",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "cross-env TARGET=chromium vite build --watch",
     "build:chromium": "cross-env TARGET=chromium vite build",

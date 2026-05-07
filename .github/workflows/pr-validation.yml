@@ -37,46 +37,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: yarn
 
-      - name: Install dependencies (if package-lock exists)
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          elif [ -f package.json ]; then
-            npm install
-          else
-            echo "No package.json yet. Skipping JS validation for now."
-          fi
+      - name: Install dependencies
+        run: yarn install --immutable
 
-      - name: Lint (if script exists)
-        run: |
-          if [ -f package.json ] && npm run | grep -q " lint"; then
-            npm run lint
-          else
-            echo "No lint script found."
-          fi
+      - name: Typecheck
+        run: yarn typecheck
 
-      - name: Typecheck (if script exists)
-        run: |
-          if [ -f package.json ] && npm run | grep -q " typecheck"; then
-            npm run typecheck
-          else
-            echo "No typecheck script found."
-          fi
+      - name: Lint
+        run: yarn lint
 
-      - name: Test (if script exists)
-        run: |
-          if [ -f package.json ] && npm run | grep -q " test"; then
-            npm test -- --runInBand || npm test
-          else
-            echo "No test script found."
-          fi
+      - name: Test
+        run: yarn test
+
+      - name: Build
+        run: yarn build
+
 
       - name: Build (if script exists)
         run: |

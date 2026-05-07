@@ -1,8 +1,15 @@
 import { isRuntimeMessage } from '../../shared/types/runtime-messages';
 import { routeRuntimeMessage } from './router';
+import { registerContextMenus } from '../context-menu/register';
+import { handleContextMenuClick } from '../context-menu/handlers';
 
 chrome.runtime.onInstalled.addListener(() => {
   console.info('AI Assistant extension installed');
+  registerContextMenus();
+});
+
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  handleContextMenuClick(info, tab).catch(console.error);
 });
 
 chrome.runtime.onMessage.addListener((message: unknown, _sender, sendResponse) => {

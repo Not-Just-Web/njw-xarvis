@@ -18,47 +18,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: yarn
 
       - name: Install dependencies
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          elif [ -f package.json ]; then
-            npm install
-          else
-            echo "No package.json found. Cannot publish yet."
-            exit 1
-          fi
+        run: yarn install --immutable
 
       - name: Build extension
-        run: |
-          if npm run | grep -q " build:chrome"; then
-            npm run build:chrome
-          elif npm run | grep -q " build"; then
-            npm run build
-          else
-            echo "No build script found."
-            exit 1
-          fi
+        run: yarn build:chromium
 
       - name: Create zip artifact
         id: package
         run: |
           set -euo pipefail
-          if [ -d dist/chrome ]; then
-            cd dist/chrome
-          elif [ -d dist ]; then
-            cd dist
-          else
-            echo "Build output directory not found (expected dist/chrome or dist)."
-            exit 1
-          fi
+          cd dist/chromium
           zip -r ../../chrome-extension.zip .
           cd ../..
           echo "zip_path=chrome-extension.zip" >> "$GITHUB_OUTPUT"
