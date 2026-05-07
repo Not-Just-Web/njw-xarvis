@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd connector-api && npm run build",
+  "buildCommand": "yarn workspace njw-xarvis-connector-api run build",
   "outputDirectory": "connector-api/dist",
-  "installCommand": "yarn install && cd connector-api && npm install",
+  "installCommand": "yarn install",
   "env": {
     "NODE_ENV": "production",
     "ALLOWED_ORIGINS": "chrome-extension://*,moz-extension://*"
