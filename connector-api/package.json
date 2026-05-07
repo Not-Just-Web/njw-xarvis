@@ -1,7 +1,7 @@
 {
-  "name": "ai-assistant-connector-api",
+  "name": "njw-xarvis-connector-api",
   "version": "1.0.0",
-  "description": "Secure connector API for AI Assistant Extension - handles token exchange and provider proxying",
+  "description": "njw-xarvis Connector API - Secure token exchange and provider proxying for AI Assistant Extension",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {

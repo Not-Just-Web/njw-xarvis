@@ -1,6 +1,6 @@
-# Browser AI Extension Architecture
+# njw-xarvis Architecture
 
-Purpose: define a stable architecture for a cross-browser AI assistant extension that works in Chrome, Firefox, and Brave.
+Purpose: define a stable architecture for njw-xarvis, a cross-browser AI assistant extension that works in Chrome, Firefox, and Brave.
 
 ## 1) Product Goals
 - Open AI chat in a browser sidepanel.

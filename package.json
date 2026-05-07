@@ -1,8 +1,8 @@
 {
-  "name": "ai-assistant-extension",
+  "name": "njw-xarvis",
   "version": "1.0.0",
   "private": true,
-  "description": "Cross-browser AI assistant extension built with React and TypeScript",
+  "description": "njw-xarvis: AI Assistant Cross-browser Extension - Chat with AI in sidepanel with live context",
   "type": "module",
   "packageManager": "yarn@4.12.0",
   "engines": {
