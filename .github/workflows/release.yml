@@ -32,7 +32,7 @@ jobs:
           cache: yarn
 
       - name: Install dependencies (root + connector-api)
-        run: yarn install && cd connector-api && npm install
+        run: yarn install
 
       - name: Type check (extension + connector-api)
         run: yarn typecheck:all
@@ -50,7 +50,7 @@ jobs:
         run: yarn build:firefox
 
       - name: Build Connector API
-        run: cd connector-api && npm run build
+        run: yarn build:api
 
       - name: Create Chromium zip
         run: |

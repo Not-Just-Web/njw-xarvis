@@ -12,6 +12,7 @@ import type { CapturedContext } from '../content-script/selection';
 type ContextChip = CapturedContext & { id: string };
 
 const randomId = () => Math.random().toString(36).slice(2, 8);
+const hasChrome = typeof chrome !== 'undefined';
 
 export function SidepanelApp(): JSX.Element {
   const [sessions, setSessions] = useState<ChatSession[]>(() => listSessions());
@@ -56,6 +57,10 @@ export function SidepanelApp(): JSX.Element {
   const removeChip = (id: string) => setChips((prev) => prev.filter((c) => c.id !== id));
 
   const captureUrl = async () => {
+    if (!hasChrome || !chrome.tabs?.query || !chrome.tabs?.sendMessage) {
+      addChip({ type: 'url', label: 'Page URL', payload: window.location.href });
+      return;
+    }
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab?.id === undefined) return;
     const res = await chrome.tabs.sendMessage(tab.id, { type: 'capture.url' }) as { context?: CapturedContext } | undefined;
@@ -63,6 +68,12 @@ export function SidepanelApp(): JSX.Element {
   };
 
   const captureSelection = async () => {
+    if (!hasChrome || !chrome.tabs?.query || !chrome.tabs?.sendMessage) {
+      const selectedText = window.getSelection()?.toString().trim();
+      if (!selectedText) return;
+      addChip({ type: 'selection', label: 'Selected Text', payload: selectedText });
+      return;
+    }
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab?.id === undefined) return;
     const res = await chrome.tabs.sendMessage(tab.id, { type: 'capture.selection' }) as { context?: CapturedContext } | undefined;
@@ -70,6 +81,14 @@ export function SidepanelApp(): JSX.Element {
   };
 
   const captureScreenshot = async () => {
+    if (!hasChrome || !chrome.runtime?.sendMessage) {
+      addChip({
+        type: 'screenshot',
+        label: 'Screenshot (Extension Only)',
+        payload: 'Screenshot capture is available in the installed browser extension.'
+      });
+      return;
+    }
     const response = await chrome.runtime.sendMessage({ type: 'capture.screenshot' }) as { context?: CapturedContext } | undefined;
     if (response?.context) addChip(response.context);
   };

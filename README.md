@@ -54,8 +54,8 @@ flowchart TD
 
 ## Quick Start
 ```bash
-git clone https://github.com/Not-Just-Web/ai-assistant-extension.git
-cd ai-assistant-extension
+git clone https://github.com/Not-Just-Web/njw-xarvis.git
+cd njw-xarvis
 yarn install
 yarn dev
 yarn lint
@@ -87,30 +87,30 @@ This project includes an optional backend connector API for secure credential ha
 
 ```bash
 # Install all dependencies (extension + connector-api)
-npm run setup
+yarn setup
 
 # Run extension and API together in one command
-npm run dev:all
+yarn dev:all
 
 # OR run separately:
 # Terminal 1: Extension (Chromium target)
-npm run dev
+yarn dev
 
 # Terminal 2: Connector API
-npm run dev:api
+yarn dev:api
 ```
 
 ### Build Everything
 
 ```bash
 # Full build and validation (both extension and connector API)
-npm run validate:all
+yarn validate:all
 
 # Or individually:
-npm run build:all          # Build both
-npm run typecheck:all      # Type check both
-npm run lint:all           # Lint both
-npm run test:all           # Test both
+yarn build:all          # Build both
+yarn typecheck:all      # Type check both
+yarn lint:all           # Lint both
+yarn test:all           # Test both
 ```
 
 ## Production Deployment
@@ -148,8 +148,8 @@ The connector API will be automatically built and deployed at `https://njw-xarvi
 # No environment variable needed!
 # Extension automatically uses /api relative path on Vercel
 # Build extension (local only - no deployment needed)
-npm run build:chromium
-npm run build:firefox
+yarn build:chromium
+yarn build:firefox
 ```
 
 #### 3. Load Extension into Browser
