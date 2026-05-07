@@ -129,8 +129,27 @@ Primary implementation docs:
 - [Git Workflow](docs/GIT_WORKFLOW.md)
 - [Release Checklist](docs/RELEASE_CHECKLIST.md)
 
-Execution rule:
-- AI coding agents must update [docs/PROGRESS.md](docs/PROGRESS.md) whenever a checklist chunk is completed or status changes.
+Execution rules (STRICT):
+- **Never commit directly to main.** All work requires a PR on GitHub.
+- **Never merge branches directly.** Always create PR first via GitHub web UI or CLI, wait for CI to pass, then merge via GitHub.
+- Git workflow: branch → commit → push → GitHub PR → CI validation → merge
+- AI coding agents must NEVER run `git merge` or `git push origin main` with local commits.
+- AI coding agents must update [docs/PROGRESS.md](docs/PROGRESS.md) whenever a checklist chunk is completed or status changes, as a PR commit.
+- If direct commits happen to main (mistake), revert immediately and recreate as PR.
+- All commits must be traceable to their PR number in GitHub history.
+
+Phase Completion Workflow (MANDATORY):
+1. Finish chunk implementation on feature branch
+2. Validate locally: `yarn typecheck && yarn lint && yarn test && yarn build` (all passing)
+3. Update `docs/PROGRESS.md` and `docs/IMPLEMENTATION_CHECKLIST.md` status
+4. Commit: `git add -A && git commit -m "[phase-N] feature description"`
+5. Push: `git push origin feature/phase-N-name`
+6. **Create PR on GitHub** (do NOT merge locally)
+7. Title PR with: `[phase-N] Short Description`
+8. Add description: feature summary, testing evidence, links to docs
+9. Wait for CI to pass (lint, typecheck, test, build)
+10. Merge via GitHub UI only (use "Squash and merge" for clean history)
+11. Verify release workflow triggers (auto-release from main merge)
 
 When repository files are added, update this document with links to:
 - contributor docs
