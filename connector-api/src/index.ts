@@ -30,6 +30,19 @@ app.get('/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', version: '1.0.0', timestamp: new Date().toISOString() });
 });
 
+// Connector root info
+app.get('/', (req: Request, res: Response) => {
+  res.json({
+    service: 'NJW Xarvis Connector API',
+    status: 'ok',
+    health: '/health',
+    endpoints: {
+      auth: '/auth/*',
+      provider: '/provider/*'
+    }
+  });
+});
+
 // Routes
 app.use('/auth', authRoutes);
 app.use('/provider', providerRoutes);

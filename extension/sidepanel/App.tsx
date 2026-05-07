@@ -1,26 +1,29 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { defaultSkills } from '../shared/skills';
-import {
-  addMessage,
-  createSession,
-  getMessages,
-  listSessions
-} from '../../shared/chat-session/store';
+import { addMessage, createSession, getMessages, listSessions } from '../../shared/chat-session/store';
 import type { ChatMessage, ChatSession } from '../../shared/chat-session/types';
 import type { CapturedContext } from '../content-script/selection';
+import type { ProviderId } from '../../shared/provider-contract/types';
 
 type ContextChip = CapturedContext & { id: string };
+
+type RuntimeResponse = {
+  type: 'response';
+  payload: {
+    ok?: boolean;
+    text?: string;
+    error?: string;
+    providerId?: ProviderId;
+    connected?: boolean;
+  };
+};
 
 const randomId = () => Math.random().toString(36).slice(2, 8);
 const hasChrome = typeof chrome !== 'undefined';
 
 export function SidepanelApp(): JSX.Element {
   const [sessions, setSessions] = useState<ChatSession[]>(() => listSessions());
-  const [activeSession, setActiveSession] = useState<ChatSession | null>(() => {
-    const existing = listSessions();
-    if (existing[0]) return existing[0];
-    return createSession('gemini');
-  });
+  const [activeSession, setActiveSession] = useState<ChatSession | null>(() => listSessions()[0] ?? null);
   const [messages, setMessages] = useState<ChatMessage[]>(() =>
     activeSession ? getMessages(activeSession.id) : []
   );
@@ -28,6 +31,9 @@ export function SidepanelApp(): JSX.Element {
   const [chips, setChips] = useState<ContextChip[]>([]);
   const [sessionOpen, setSessionOpen] = useState(true);
   const [skillHint, setSkillHint] = useState(false);
+  const [providerId, setProviderId] = useState<ProviderId>('gemini');
+  const [providerConnected, setProviderConnected] = useState(false);
+  const [sending, setSending] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
 
@@ -45,10 +51,37 @@ export function SidepanelApp(): JSX.Element {
   };
 
   const newChat = () => {
-    const session = createSession('gemini');
+    const session = createSession(providerId);
     setSessions(listSessions());
     switchSession(session);
   };
+
+  useEffect(() => {
+    if (!hasChrome || !chrome.runtime?.sendMessage) {
+      return;
+    }
+
+    const syncProvider = async () => {
+      const activeRes = (await chrome.runtime.sendMessage({
+        type: 'provider.getActive',
+        payload: {}
+      })) as RuntimeResponse;
+
+      const active = (activeRes.payload.providerId ?? 'gemini') as ProviderId;
+      setProviderId(active);
+
+      const statusRes = (await chrome.runtime.sendMessage({
+        type: 'provider.getAuthStatus',
+        payload: { providerId: active }
+      })) as RuntimeResponse;
+
+      setProviderConnected(statusRes.payload.ok === true && statusRes.payload.connected === true);
+    };
+
+    syncProvider().catch(() => {
+      setProviderConnected(false);
+    });
+  }, []);
 
   const addChip = useCallback((ctx: CapturedContext) => {
     setChips((prev) => [...prev, { ...ctx, id: randomId() }]);
@@ -63,7 +96,9 @@ export function SidepanelApp(): JSX.Element {
     }
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab?.id === undefined) return;
-    const res = await chrome.tabs.sendMessage(tab.id, { type: 'capture.url' }) as { context?: CapturedContext } | undefined;
+    const res = (await chrome.tabs.sendMessage(tab.id, { type: 'capture.url' })) as
+      | { context?: CapturedContext }
+      | undefined;
     if (res?.context) addChip(res.context);
   };
 
@@ -76,7 +111,9 @@ export function SidepanelApp(): JSX.Element {
     }
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab?.id === undefined) return;
-    const res = await chrome.tabs.sendMessage(tab.id, { type: 'capture.selection' }) as { context?: CapturedContext } | undefined;
+    const res = (await chrome.tabs.sendMessage(tab.id, { type: 'capture.selection' })) as
+      | { context?: CapturedContext }
+      | undefined;
     if (res?.context) addChip(res.context);
   };
 
@@ -89,32 +126,82 @@ export function SidepanelApp(): JSX.Element {
       });
       return;
     }
-    const response = await chrome.runtime.sendMessage({ type: 'capture.screenshot' }) as { context?: CapturedContext } | undefined;
+    const response = (await chrome.runtime.sendMessage({ type: 'capture.screenshot' })) as
+      | { context?: CapturedContext }
+      | undefined;
     if (response?.context) addChip(response.context);
   };
 
-  const send = () => {
+  const send = async () => {
     const trimmed = value.trim();
-    if (!trimmed || !activeSession) return;
+    if (!trimmed || sending) return;
 
-    const msg = addMessage({ sessionId: activeSession.id, role: 'user', content: trimmed });
-    setMessages((prev) => [...prev, msg]);
+    let targetSession = activeSession;
+    if (!targetSession) {
+      targetSession = createSession(providerId);
+      setSessions(listSessions());
+      setActiveSession(targetSession);
+    }
 
-    const reply = addMessage({
-      sessionId: activeSession.id,
-      role: 'assistant',
-      content: '…thinking (provider not connected yet)'
-    });
-    setMessages((prev) => [...prev, reply]);
+    const userMessage = addMessage({ sessionId: targetSession.id, role: 'user', content: trimmed });
+    setMessages((prev) => [...prev, userMessage]);
     setValue('');
-    setChips([]);
     setSkillHint(false);
+
+    if (!providerConnected || !hasChrome || !chrome.runtime?.sendMessage) {
+      const disconnectedReply = addMessage({
+        sessionId: targetSession.id,
+        role: 'assistant',
+        content:
+          'Provider is not connected. Open popup, connect your provider API key, then use Quick Launch.'
+      });
+      setMessages((prev) => [...prev, disconnectedReply]);
+      setChips([]);
+      return;
+    }
+
+    try {
+      setSending(true);
+      const response = (await chrome.runtime.sendMessage({
+        type: 'chat.send',
+        payload: {
+          sessionId: targetSession.id,
+          prompt: trimmed,
+          context: chips.map((chip) => ({
+            id: chip.id,
+            sessionId: targetSession.id,
+            type: chip.type,
+            label: chip.label,
+            payload: chip.payload,
+            createdAt: new Date().toISOString()
+          }))
+        }
+      })) as RuntimeResponse;
+
+      const content =
+        response.payload.ok === true && response.payload.text
+          ? response.payload.text
+          : (response.payload.error ?? 'Could not send message. Reconnect provider from popup.');
+
+      const assistantReply = addMessage({ sessionId: targetSession.id, role: 'assistant', content });
+      setMessages((prev) => [...prev, assistantReply]);
+    } catch {
+      const errorReply = addMessage({
+        sessionId: targetSession.id,
+        role: 'assistant',
+        content: 'Network error while sending message. Try again.'
+      });
+      setMessages((prev) => [...prev, errorReply]);
+    } finally {
+      setSending(false);
+      setChips([]);
+    }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      send();
+      void send();
     }
   };
 
@@ -148,25 +235,24 @@ export function SidepanelApp(): JSX.Element {
   };
 
   return (
-    <main className="sp-shell" onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
-      {sessionOpen && (
-        <aside className="sessions" aria-label="Sessions">
-          <button className="new-chat" type="button" onClick={newChat}>
-            + New Chat
-          </button>
-          <ul>
-            {sessions.map((s) => (
-              <li
-                key={s.id}
-                className={s.id === activeSession?.id ? 'active' : ''}
-                onClick={() => switchSession(s)}
-              >
-                {s.title}
-              </li>
-            ))}
-          </ul>
-        </aside>
-      )}
+    <main className={`sp-shell ${sessionOpen ? 'sessions-open' : 'sessions-closed'}`} onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
+      <aside className="sessions" aria-label="Sessions">
+        <button className="new-chat" type="button" onClick={newChat}>
+          + New Chat
+        </button>
+        <ul>
+          {sessions.length === 0 && <li className="empty">No previous session</li>}
+          {sessions.map((s) => (
+            <li
+              key={s.id}
+              className={s.id === activeSession?.id ? 'active' : ''}
+              onClick={() => switchSession(s)}
+            >
+              {s.title}
+            </li>
+          ))}
+        </ul>
+      </aside>
 
       <section className="chat-area">
         <header className="topbar">
@@ -180,11 +266,13 @@ export function SidepanelApp(): JSX.Element {
               ☰
             </button>
             <div>
-              <p className="eyebrow">AI Assistant</p>
+              <p className="eyebrow">NJW Xarvis</p>
               <h1>{activeSession?.title ?? 'Chat'}</h1>
             </div>
           </div>
-          <span className="provider-pill">Gemini</span>
+          <span className="provider-pill">
+            {providerId.charAt(0).toUpperCase() + providerId.slice(1)} · {providerConnected ? 'Connected' : 'Disconnected'}
+          </span>
         </header>
 
         <section className="timeline" ref={timelineRef} aria-label="Messages">
@@ -213,9 +301,9 @@ export function SidepanelApp(): JSX.Element {
           )}
 
           <div className="capture-bar">
-            <button type="button" onClick={captureUrl} title="Capture page URL">URL</button>
-            <button type="button" onClick={captureSelection} title="Capture selected text">Text</button>
-            <button type="button" onClick={captureScreenshot} title="Capture screenshot">Screenshot</button>
+            <button type="button" onClick={() => void captureUrl()} title="Capture page URL">URL</button>
+            <button type="button" onClick={() => void captureSelection()} title="Capture selected text">Text</button>
+            <button type="button" onClick={() => void captureScreenshot()} title="Capture screenshot">Screenshot</button>
           </div>
 
           {skillHint && (
@@ -250,8 +338,8 @@ export function SidepanelApp(): JSX.Element {
           />
 
           <div className="actions">
-            <button type="button" className="primary" onClick={send}>
-              Send
+            <button type="button" className="primary" onClick={() => void send()} disabled={sending}>
+              {sending ? 'Sending...' : 'Send'}
             </button>
           </div>
         </footer>

@@ -64,6 +64,18 @@ jobs:
           zip -r ../../njw-xarvis-firefox.zip .
           cd ../..
 
+      - name: Create packed Chromium tarball
+        run: |
+          cd dist/chromium
+          tar -czf ../../njw-xarvis-chromium-packed.tar.gz .
+          cd ../..
+
+      - name: Create packed Firefox tarball
+        run: |
+          cd dist/firefox
+          tar -czf ../../njw-xarvis-firefox-packed.tar.gz .
+          cd ../..
+
       - name: Get version from package.json
         id: version
         run: |
@@ -89,6 +101,8 @@ jobs:
           files: |
             njw-xarvis-chromium.zip
             njw-xarvis-firefox.zip
+            njw-xarvis-chromium-packed.tar.gz
+            njw-xarvis-firefox-packed.tar.gz
           body: |
             ## 🚀 NJW Xarvis v${{ steps.version.outputs.version }}
 
@@ -96,6 +110,8 @@ jobs:
 
             - **Chromium** (Chrome, Brave, Edge): `njw-xarvis-chromium.zip`
             - **Firefox**: `njw-xarvis-firefox.zip`
+            - **Chromium Packed**: `njw-xarvis-chromium-packed.tar.gz`
+            - **Firefox Packed**: `njw-xarvis-firefox-packed.tar.gz`
 
             ### 📥 Installation Instructions
 

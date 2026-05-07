@@ -12,11 +12,11 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "cross-env TARGET=chromium vite build --watch",
+    "dev": "cross-env TARGET=chromium VITE_CONNECTOR_API_URL=http://localhost:3001 vite build --watch",
     "dev:api": "cd connector-api && yarn dev",
     "dev:all": "concurrently \"yarn dev\" \"yarn dev:api\"",
-    "build:chromium": "cross-env TARGET=chromium vite build",
-    "build:firefox": "cross-env TARGET=firefox vite build",
+    "build:chromium": "cross-env TARGET=chromium VITE_CONNECTOR_API_URL=https://njw-xarvis.vercel.app/api vite build",
+    "build:firefox": "cross-env TARGET=firefox VITE_CONNECTOR_API_URL=https://njw-xarvis.vercel.app/api vite build",
     "build": "yarn build:chromium && yarn build:firefox",
     "build:all": "yarn build && cd connector-api && yarn build",
     "build:api": "cd connector-api && yarn build",

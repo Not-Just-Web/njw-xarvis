@@ -58,6 +58,7 @@ label {
 }
 
 select,
+input,
 button {
   width: 100%;
   border-radius: 10px;
@@ -76,6 +77,21 @@ button {
 
 button:hover {
   background: linear-gradient(135deg, var(--primary-strong), #00858e);
+}
+
+button.secondary {
+  border: 1px solid var(--border);
+  background: #eef1fa;
+  color: #28304d;
+}
+
+button.secondary:hover {
+  background: #e3e8f7;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .status-row {
