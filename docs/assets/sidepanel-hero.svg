@@ -1,0 +1,69 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1020"/>
+      <stop offset="1" stop-color="#16324F"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="840" y1="40" x2="1240" y2="680" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="chip" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F59E0B"/>
+      <stop offset="1" stop-color="#FB7185"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="1280" height="720" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="720" fill="url(#bg)"/>
+
+  <g opacity="0.16">
+    <circle cx="180" cy="120" r="220" fill="#38BDF8"/>
+    <circle cx="420" cy="560" r="260" fill="#22D3EE"/>
+    <circle cx="1040" cy="80" r="180" fill="#F97316"/>
+  </g>
+
+  <rect x="40" y="60" width="1180" height="600" rx="20" fill="#0B1220" stroke="#1F2937"/>
+  <rect x="60" y="92" width="760" height="540" rx="14" fill="#0E1628"/>
+
+  <rect x="86" y="124" width="420" height="24" rx="8" fill="#1F2937"/>
+  <rect x="86" y="168" width="640" height="14" rx="7" fill="#1F2937"/>
+  <rect x="86" y="190" width="560" height="14" rx="7" fill="#1F2937"/>
+
+  <rect x="86" y="244" width="420" height="72" rx="12" fill="#1D4ED8" opacity="0.25"/>
+  <rect x="524" y="342" width="220" height="56" rx="12" fill="#10B981" opacity="0.28"/>
+  <rect x="86" y="418" width="360" height="56" rx="12" fill="#F59E0B" opacity="0.28"/>
+
+  <rect x="840" y="40" width="400" height="640" rx="20" fill="url(#panel)" stroke="#374151" filter="url(#shadow)"/>
+
+  <text x="872" y="90" fill="#E5E7EB" font-size="24" font-family="Verdana, sans-serif" font-weight="700">AI Sidepanel Chat</text>
+  <text x="872" y="120" fill="#94A3B8" font-size="14" font-family="Verdana, sans-serif">Gemini | Claude | ChatGPT | Custom</text>
+
+  <rect x="872" y="150" width="160" height="34" rx="10" fill="#1F2937"/>
+  <text x="886" y="172" fill="#E5E7EB" font-size="13" font-family="Verdana, sans-serif">Session: Product QA</text>
+
+  <rect x="872" y="206" width="344" height="78" rx="12" fill="#1E293B"/>
+  <text x="888" y="232" fill="#E2E8F0" font-size="13" font-family="Verdana, sans-serif">User: Explain this checkout error from screenshot.</text>
+  <text x="888" y="252" fill="#E2E8F0" font-size="13" font-family="Verdana, sans-serif">Context: URL + selected element + screenshot</text>
+
+  <rect x="872" y="300" width="344" height="118" rx="12" fill="#0F766E" opacity="0.26"/>
+  <text x="888" y="328" fill="#ECFEFF" font-size="13" font-family="Verdana, sans-serif">Assistant: Root cause found in invalid field mapping.</text>
+  <text x="888" y="348" fill="#ECFEFF" font-size="13" font-family="Verdana, sans-serif">Suggested fix + test steps generated.</text>
+
+  <rect x="872" y="442" width="108" height="30" rx="8" fill="url(#chip)"/>
+  <text x="892" y="462" fill="#111827" font-size="12" font-family="Verdana, sans-serif" font-weight="700">URL</text>
+
+  <rect x="988" y="442" width="132" height="30" rx="8" fill="url(#chip)"/>
+  <text x="1002" y="462" fill="#111827" font-size="12" font-family="Verdana, sans-serif" font-weight="700">Element</text>
+
+  <rect x="1128" y="442" width="88" height="30" rx="8" fill="url(#chip)"/>
+  <text x="1144" y="462" fill="#111827" font-size="12" font-family="Verdana, sans-serif" font-weight="700">Shot</text>
+
+  <rect x="872" y="500" width="344" height="82" rx="12" fill="#111827" stroke="#374151"/>
+  <text x="888" y="530" fill="#9CA3AF" font-size="13" font-family="Verdana, sans-serif">Ask a question with live browser context...</text>
+
+  <rect x="1116" y="596" width="100" height="40" rx="10" fill="#22C55E"/>
+  <text x="1148" y="621" fill="#052E16" font-size="14" font-family="Verdana, sans-serif" font-weight="700">Send</text>
+</svg>
