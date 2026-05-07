@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { ProviderId, ProviderAdapter } from '@ai/shared/provider-contract/types';
 import {
   setActiveProvider,
   getActiveProvider,
@@ -35,7 +36,7 @@ describe('provider-router', () => {
     });
 
     it('throws for an unregistered provider', () => {
-      expect(() => setActiveProvider('unknown' as any)).toThrow('Provider not registered');
+      expect(() => setActiveProvider('unknown' as ProviderId)).toThrow('Provider not registered');
     });
   });
 
@@ -63,7 +64,7 @@ describe('provider-router', () => {
     it('throws when no adapter available', async () => {
       // Force a bad state by mocking registry
       const { providerRegistry } = await import('@ai/shared/provider-contract/registry');
-      const spy = vi.spyOn(providerRegistry, 'get').mockReturnValue(undefined as any);
+      const spy = vi.spyOn(providerRegistry, 'get').mockReturnValue(undefined as unknown as ProviderAdapter);
 
       await expect(
         sendWithActiveProvider({

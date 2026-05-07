@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { captureCurrentUrl, captureSelectedText } from '@ai/extension/content-script/selection';
 
 describe('content-script selection', () => {
@@ -22,24 +22,24 @@ describe('content-script selection', () => {
     });
 
     it('returns null when no text is selected', () => {
-      const mockSelection = { toString: () => '' };
-      vi.spyOn(window, 'getSelection').mockReturnValue(mockSelection as any);
+      const mockSelection = { toString: () => '' } as Selection;
+      vi.spyOn(window, 'getSelection').mockReturnValue(mockSelection);
 
       const result = captureSelectedText();
       expect(result).toBeNull();
     });
 
     it('returns null when selection only has whitespace', () => {
-      const mockSelection = { toString: () => '   ' };
-      vi.spyOn(window, 'getSelection').mockReturnValue(mockSelection as any);
+      const mockSelection = { toString: () => '   ' } as Selection;
+      vi.spyOn(window, 'getSelection').mockReturnValue(mockSelection);
 
       const result = captureSelectedText();
       expect(result).toBeNull();
     });
 
     it('returns CapturedContext when text is selected', () => {
-      const mockSelection = { toString: () => 'Selected text content' };
-      vi.spyOn(window, 'getSelection').mockReturnValue(mockSelection as any);
+      const mockSelection = { toString: () => 'Selected text content' } as Selection;
+      vi.spyOn(window, 'getSelection').mockReturnValue(mockSelection);
 
       const result = captureSelectedText();
       expect(result).not.toBeNull();
@@ -49,8 +49,8 @@ describe('content-script selection', () => {
     });
 
     it('trims whitespace from selected text', () => {
-      const mockSelection = { toString: () => '  trimmed  ' };
-      vi.spyOn(window, 'getSelection').mockReturnValue(mockSelection as any);
+      const mockSelection = { toString: () => '  trimmed  ' } as Selection;
+      vi.spyOn(window, 'getSelection').mockReturnValue(mockSelection);
 
       const result = captureSelectedText();
       expect(result!.payload).toBe('trimmed');

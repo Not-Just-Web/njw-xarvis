@@ -2,6 +2,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { handleContextMenuClick } from '@ai/extension/context-menu/handlers';
 import { CONTEXT_MENU_IDS } from '@ai/extension/context-menu/register';
 
+type MenuInfo = chrome.contextMenus.OnClickData;
+type Tab = chrome.tabs.Tab;
+
 describe('context-menu handlers', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -9,8 +12,8 @@ describe('context-menu handlers', () => {
 
   describe('handleContextMenuClick', () => {
     it('opens sidepanel on OPEN_CHAT action', async () => {
-      const info = { menuItemId: CONTEXT_MENU_IDS.OPEN_CHAT, pageUrl: 'https://example.com' } as any;
-      const tab = { windowId: 1 } as any;
+      const info = { menuItemId: CONTEXT_MENU_IDS.OPEN_CHAT, pageUrl: 'https://example.com' } as MenuInfo;
+      const tab = { windowId: 1 } as Tab;
 
       await handleContextMenuClick(info, tab);
 
@@ -22,8 +25,8 @@ describe('context-menu handlers', () => {
         menuItemId: CONTEXT_MENU_IDS.SEND_SELECTED,
         selectionText: 'some selected text',
         pageUrl: 'https://example.com'
-      } as any;
-      const tab = { windowId: 1 } as any;
+      } as MenuInfo;
+      const tab = { windowId: 1 } as Tab;
 
       await handleContextMenuClick(info, tab);
 
@@ -43,8 +46,8 @@ describe('context-menu handlers', () => {
       const info = {
         menuItemId: CONTEXT_MENU_IDS.SEND_SELECTED,
         pageUrl: 'https://example.com'
-      } as any;
-      const tab = { windowId: 1 } as any;
+      } as MenuInfo;
+      const tab = { windowId: 1 } as Tab;
 
       await handleContextMenuClick(info, tab);
 
@@ -56,8 +59,8 @@ describe('context-menu handlers', () => {
       const info = {
         menuItemId: CONTEXT_MENU_IDS.SEND_URL,
         pageUrl: 'https://example.com/test'
-      } as any;
-      const tab = { windowId: 1 } as any;
+      } as MenuInfo;
+      const tab = { windowId: 1 } as Tab;
 
       await handleContextMenuClick(info, tab);
 
@@ -74,8 +77,8 @@ describe('context-menu handlers', () => {
     });
 
     it('handles undefined windowId gracefully', async () => {
-      const info = { menuItemId: CONTEXT_MENU_IDS.OPEN_CHAT, pageUrl: 'https://x.com' } as any;
-      const tab = { windowId: undefined } as any;
+      const info = { menuItemId: CONTEXT_MENU_IDS.OPEN_CHAT, pageUrl: 'https://x.com' } as MenuInfo;
+      const tab = { windowId: undefined } as unknown as Tab;
 
       await handleContextMenuClick(info, tab);
 

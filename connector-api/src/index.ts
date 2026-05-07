@@ -40,7 +40,7 @@ app.use((req: Request, res: Response) => {
 });
 
 // Error handler
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
   console.error(`[${req.id}] Error:`, err);
   res.status(500).json({
     error: 'Internal server error',
@@ -51,6 +51,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 // Declare global types for Express
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       id: string;

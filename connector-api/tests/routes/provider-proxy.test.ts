@@ -20,7 +20,7 @@ const createTestApp = () => {
 };
 
 describe('Provider Proxy Routes', () => {
-  let app: any;
+  let app: ReturnType<typeof createTestApp>;
 
   beforeEach(() => {
     app = createTestApp();
