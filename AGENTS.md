@@ -142,10 +142,11 @@ The following secrets are configured in GitHub Actions for CI/CD workflows.
 
 #### CHROME_EXTENSION_CLIENT_ID (Future - Store Submission)
 - **Purpose**: Publish extensions to Chrome Web Store
-- **Setup**: Obtain from Google Play Developer Console
+- **Setup**: Follow [docs/CHROME_STORE_SETUP.md](docs/CHROME_STORE_SETUP.md) for step-by-step instructions
 - **Used by**: `.github/workflows/publish-chrome.yml`
 - **When needed**: When ready to publish to Chrome Web Store
 - **Related secrets**: Also need `CHROME_EXTENSION_CLIENT_SECRET`, `CHROME_EXTENSION_REFRESH_TOKEN`, `CHROME_EXTENSION_ID`
+- **Helper script**: Run `./scripts/setup-chrome-store-secrets.sh` to interactively set all 4 secrets at once
 
 #### FIREFOX_API_JWT_ISSUER (Future - Store Submission)
 - **Purpose**: Publish extensions to Firefox Add-ons
