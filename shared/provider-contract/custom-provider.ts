@@ -26,7 +26,7 @@ export function createCustomProviderAdapter(definition: CustomProviderDefinition
     displayName: definition.displayName,
     supports: definition.capabilities,
     
-    authenticate: async (/* config: ProviderAuthConfig */): Promise<boolean> => {
+    authenticate: async function(config): Promise<boolean> {
       try {
         // Validate endpoint is reachable and credentials work
         const headers: Record<string, string> = {
@@ -34,11 +34,11 @@ export function createCustomProviderAdapter(definition: CustomProviderDefinition
           ...definition.headers,
         };
 
-        if (config.token && definition.authType === 'api-key') {
+        if (config && config.token && definition.authType === 'api-key') {
           headers['X-API-Key'] = config.token;
-        } else if (config.token && definition.authType === 'bearer') {
+        } else if (config && config.token && definition.authType === 'bearer') {
           headers['Authorization'] = `Bearer ${config.token}`;
-        } else if (config.token && definition.authType === 'basic') {
+        } else if (config && config.token && definition.authType === 'basic') {
           headers['Authorization'] = `Basic ${config.token}`;
         }
 
