@@ -31,8 +31,47 @@ jobs:
       - name: Lint (extension + connector-api)
         run: yarn lint:all
 
-      - name: Test (extension only)
-        run: yarn test
+
+      - name: Test with coverage (extension only)
+        run: yarn test --coverage
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+
+      - name: Enforce minimum coverage
+        run: |
+          npx vitest --coverage --run --reporter=json > coverage-summary.json
+          COVERAGE=$(jq '.total.lines.pct' coverage-summary.json)
+          echo "Total line coverage: $COVERAGE%"
+          if (( $(echo "$COVERAGE < 97" | bc -l) )); then
+            echo "::error::Test coverage below 97% ($COVERAGE%)"
+            exit 1
+          fi
+        shell: bash
 
       - name: Build (extension + connector-api)
         run: yarn build:all
+
+      - name: Start dev server for Playwright
+        run: yarn dev &
+        env:
+          NODE_ENV: development
+        shell: bash
+
+      - name: Wait for dev server
+        run: |
+          for i in {1..30}; do
+            if nc -z localhost 5173; then
+              echo "Dev server is up!"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Dev server did not start in time" && exit 1
+        shell: bash
+
+      - name: Playwright integration tests
+        run: npx playwright test

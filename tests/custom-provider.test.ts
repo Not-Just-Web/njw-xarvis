@@ -269,10 +269,10 @@ describe('custom-provider', () => {
     it('should use first model from list as default', async () => {
       const adapter = createCustomProviderAdapter(mockDefinition);
 
-      const mockResponse = {
-        choices: [{ message: { content: 'Response' } }],
-        model: 'gpt-3.5',
-      };
+      // const mockResponse = {
+      //   choices: [{ message: { content: 'Response' } }],
+      //   model: 'gpt-3.5',
+      // };
 
       global.Response = MockResponse;
       global.fetch = vi.fn().mockResolvedValueOnce(new MockResponse('', { status: 200 }));

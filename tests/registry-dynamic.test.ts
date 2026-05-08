@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { providerRegistry } from '@ai/shared/provider-contract/registry';
 import { createCustomProviderAdapter, validateCustomProviderDefinition } from '@ai/shared/provider-contract/custom-provider';
-import type { ProviderAdapter, ProviderId, ProviderAuthConfig } from '@ai/shared/provider-contract/types';
+import type { ProviderAdapter } from '@ai/shared/provider-contract/types';
 
 describe('ProviderRegistry (dynamic/custom flows)', () => {
 	const customDef = {
@@ -26,9 +26,9 @@ describe('ProviderRegistry (dynamic/custom flows)', () => {
 		const found = providerRegistry.get(id);
 		expect(found).toBeDefined();
 		expect(found?.displayName).toBe('Dynamic Test Provider');
-		expect(providerRegistry.listCustom().map(p => p.id)).toContain(id);
-		expect(providerRegistry.listAll().map(p => p.id)).toContain(id);
-		expect(providerRegistry.getCustomDefinitions().find(d => d.id === 'dyn-test')).toBeDefined();
+		expect(providerRegistry.listCustom().map((p: ProviderAdapter) => p.id)).toContain(id);
+		expect(providerRegistry.listAll().map((p: ProviderAdapter) => p.id)).toContain(id);
+		expect(providerRegistry.getCustomDefinitions().find((d: { id: string }) => d.id === 'dyn-test')).toBeDefined();
 	});
 
 	it('unregister removes provider and cleans up custom definition', () => {
@@ -71,7 +71,7 @@ describe('ProviderRegistry (dynamic/custom flows)', () => {
 		expect(validateCustomProviderDefinition({ ...customDef, id: 'bad id' })).toMatch(/Provider ID/);
 		expect(validateCustomProviderDefinition({ ...customDef, displayName: '' })).toMatch(/Display name/);
 		expect(validateCustomProviderDefinition({ ...customDef, endpoint: 'ftp://bad' })).toMatch(/Endpoint/);
-		expect(validateCustomProviderDefinition({ ...customDef, authType: 'invalid' as any })).toMatch(/Auth type/);
+		expect(validateCustomProviderDefinition({ ...customDef, authType: 'invalid' as unknown as 'none' | 'bearer' | 'api-key' | 'oauth' })).toMatch(/Auth type/);
 		expect(validateCustomProviderDefinition({ ...customDef, modelList: [] })).toMatch(/At least one model/);
 		expect(validateCustomProviderDefinition(customDef)).toBeNull();
 	});

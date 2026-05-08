@@ -1,7 +1,7 @@
 // Shared mock Response for Node/vitest environments
 export class MockResponse {
   status: number;
-  private _json: any;
+  private _json: unknown;
   constructor(body: string | object, opts: { status: number }) {
     this.status = opts.status;
     if (typeof body === 'string') {
@@ -15,5 +15,5 @@ export class MockResponse {
     }
   }
   get ok() { return this.status === 200; }
-  async json() { return this._json; }
+  async json(): Promise<unknown> { return this._json; }
 }
