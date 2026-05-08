@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { CustomProviderSetup } from '../extension/sidepanel/components/CustomProviderSetup';
-import type { CustomProviderDefinition } from '../shared/provider-contract/custom-provider';
+// import type { CustomProviderDefinition } from '../shared/provider-contract/custom-provider';
 
 describe('CustomProviderSetup', () => {
   const mockOnAddProvider = vi.fn();
