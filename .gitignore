@@ -57,3 +57,8 @@ web-ext-artifacts/
 # Temporary files
 tmp/
 temp/
+
+.coverage/
+.coverage-*.json
+.coverage-*.lcov
+.coverage-*.txt
