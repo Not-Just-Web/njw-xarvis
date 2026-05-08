@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { CustomProviderSetup } from '../../extension/sidepanel/components/CustomProviderSetup';
-import type { CustomProviderDefinition } from '../../shared/provider-contract/custom-provider';
+import { CustomProviderSetup } from '../extension/sidepanel/components/CustomProviderSetup';
+// import type { CustomProviderDefinition } from '../shared/provider-contract/custom-provider';
 
 describe('CustomProviderSetup', () => {
   const mockOnAddProvider = vi.fn();
@@ -9,6 +9,10 @@ describe('CustomProviderSetup', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   describe('form rendering', () => {
@@ -21,11 +25,11 @@ describe('CustomProviderSetup', () => {
       );
 
       expect(screen.getByText('Add Custom Provider')).toBeInTheDocument();
-      expect(screen.getByLabelText('Provider ID')).toBeInTheDocument();
-      expect(screen.getByLabelText('Display Name')).toBeInTheDocument();
-      expect(screen.getByLabelText('API Endpoint')).toBeInTheDocument();
-      expect(screen.getByLabelText('Authentication Type')).toBeInTheDocument();
-      expect(screen.getByLabelText('Model Names')).toBeInTheDocument();
+      expect(screen.getByLabelText(/Provider ID/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Display Name/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/API Endpoint/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Authentication Type/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Model Names/i)).toBeInTheDocument();
     });
 
     it('should have all form fields', () => {
@@ -62,7 +66,7 @@ describe('CustomProviderSetup', () => {
         />
       );
 
-      const idInput = screen.getByLabelText('Provider ID') as HTMLInputElement;
+      const idInput = screen.getByLabelText(/Provider ID/i) as HTMLInputElement;
       fireEvent.change(idInput, { target: { value: 'Invalid_ID' } });
 
       expect(idInput.pattern).toBe('^[a-z0-9-]+$');
@@ -90,16 +94,16 @@ describe('CustomProviderSetup', () => {
       );
 
       // Fill out form
-      fireEvent.change(screen.getByLabelText('Provider ID'), {
+      fireEvent.change(screen.getByLabelText(/Provider ID/i), {
         target: { value: 'test-provider' },
       });
-      fireEvent.change(screen.getByLabelText('Display Name'), {
+      fireEvent.change(screen.getByLabelText(/Display Name/i), {
         target: { value: 'Test Provider' },
       });
-      fireEvent.change(screen.getByLabelText('API Endpoint'), {
+      fireEvent.change(screen.getByLabelText(/API Endpoint/i), {
         target: { value: 'https://api.example.com' },
       });
-      fireEvent.change(screen.getByLabelText('Model Names'), {
+      fireEvent.change(screen.getByLabelText(/Model Names/i), {
         target: { value: 'model-a, model-b' },
       });
 
@@ -139,16 +143,16 @@ describe('CustomProviderSetup', () => {
         />
       );
 
-      fireEvent.change(screen.getByLabelText('Provider ID'), {
+      fireEvent.change(screen.getByLabelText(/Provider ID/i), {
         target: { value: 'test-provider' },
       });
-      fireEvent.change(screen.getByLabelText('Display Name'), {
+      fireEvent.change(screen.getByLabelText(/Display Name/i), {
         target: { value: 'Test Provider' },
       });
-      fireEvent.change(screen.getByLabelText('API Endpoint'), {
+      fireEvent.change(screen.getByLabelText(/API Endpoint/i), {
         target: { value: 'https://api.example.com' },
       });
-      fireEvent.change(screen.getByLabelText('Model Names'), {
+      fireEvent.change(screen.getByLabelText(/Model Names/i), {
         target: { value: 'model-a' },
       });
 
@@ -169,16 +173,16 @@ describe('CustomProviderSetup', () => {
         />
       );
 
-      fireEvent.change(screen.getByLabelText('Provider ID'), {
+      fireEvent.change(screen.getByLabelText(/Provider ID/i), {
         target: { value: 'test-provider' },
       });
-      fireEvent.change(screen.getByLabelText('Display Name'), {
+      fireEvent.change(screen.getByLabelText(/Display Name/i), {
         target: { value: 'Test' },
       });
-      fireEvent.change(screen.getByLabelText('API Endpoint'), {
+      fireEvent.change(screen.getByLabelText(/API Endpoint/i), {
         target: { value: 'https://api.example.com' },
       });
-      fireEvent.change(screen.getByLabelText('Model Names'), {
+      fireEvent.change(screen.getByLabelText(/Model Names/i), {
         target: { value: 'model-a' },
       });
 
@@ -206,16 +210,16 @@ describe('CustomProviderSetup', () => {
         />
       );
 
-      fireEvent.change(screen.getByLabelText('Provider ID'), {
+      fireEvent.change(screen.getByLabelText(/Provider ID/i), {
         target: { value: 'test-provider' },
       });
-      fireEvent.change(screen.getByLabelText('Display Name'), {
+      fireEvent.change(screen.getByLabelText(/Display Name/i), {
         target: { value: 'Test Provider' },
       });
-      fireEvent.change(screen.getByLabelText('API Endpoint'), {
+      fireEvent.change(screen.getByLabelText(/API Endpoint/i), {
         target: { value: 'https://api.example.com' },
       });
-      fireEvent.change(screen.getByLabelText('Model Names'), {
+      fireEvent.change(screen.getByLabelText(/Model Names/i), {
         target: { value: 'model-a' },
       });
 
@@ -253,16 +257,16 @@ describe('CustomProviderSetup', () => {
         />
       );
 
-      fireEvent.change(screen.getByLabelText('Provider ID'), {
+      fireEvent.change(screen.getByLabelText(/Provider ID/i), {
         target: { value: 'test-provider' },
       });
-      fireEvent.change(screen.getByLabelText('Display Name'), {
+      fireEvent.change(screen.getByLabelText(/Display Name/i), {
         target: { value: 'Test Provider' },
       });
-      fireEvent.change(screen.getByLabelText('API Endpoint'), {
+      fireEvent.change(screen.getByLabelText(/API Endpoint/i), {
         target: { value: 'https://api.example.com' },
       });
-      fireEvent.change(screen.getByLabelText('Model Names'), {
+      fireEvent.change(screen.getByLabelText(/Model Names/i), {
         target: { value: 'model-a' },
       });
 
@@ -280,7 +284,7 @@ describe('CustomProviderSetup', () => {
     });
 
     it('should close after success timeout', async () => {
-      vi.useFakeTimers();
+      const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
       mockOnAddProvider.mockResolvedValue(undefined);
 
       render(
@@ -290,16 +294,16 @@ describe('CustomProviderSetup', () => {
         />
       );
 
-      fireEvent.change(screen.getByLabelText('Provider ID'), {
+      fireEvent.change(screen.getByLabelText(/Provider ID/i), {
         target: { value: 'test-provider' },
       });
-      fireEvent.change(screen.getByLabelText('Display Name'), {
+      fireEvent.change(screen.getByLabelText(/Display Name/i), {
         target: { value: 'Test' },
       });
-      fireEvent.change(screen.getByLabelText('API Endpoint'), {
+      fireEvent.change(screen.getByLabelText(/API Endpoint/i), {
         target: { value: 'https://api.example.com' },
       });
-      fireEvent.change(screen.getByLabelText('Model Names'), {
+      fireEvent.change(screen.getByLabelText(/Model Names/i), {
         target: { value: 'model-a' },
       });
 
@@ -315,13 +319,11 @@ describe('CustomProviderSetup', () => {
         expect(screen.getByText(/Provider Added Successfully/)).toBeInTheDocument();
       });
 
-      vi.advanceTimersByTime(2000);
-
-      await waitFor(() => {
-        expect(mockOnClose).toHaveBeenCalled();
-      });
-
-      vi.useRealTimers();
+      const closeTimerCall = setTimeoutSpy.mock.calls.find(([, delay]) => delay === 2000);
+      expect(closeTimerCall).toBeDefined();
+      const closeCallback = closeTimerCall?.[0] as () => void;
+      closeCallback();
+      expect(mockOnClose).toHaveBeenCalled();
     });
   });
 
@@ -336,16 +338,16 @@ describe('CustomProviderSetup', () => {
         />
       );
 
-      fireEvent.change(screen.getByLabelText('Provider ID'), {
+      fireEvent.change(screen.getByLabelText(/Provider ID/i), {
         target: { value: 'test-provider' },
       });
-      fireEvent.change(screen.getByLabelText('Display Name'), {
+      fireEvent.change(screen.getByLabelText(/Display Name/i), {
         target: { value: 'Test' },
       });
-      fireEvent.change(screen.getByLabelText('API Endpoint'), {
+      fireEvent.change(screen.getByLabelText(/API Endpoint/i), {
         target: { value: 'https://api.example.com' },
       });
-      fireEvent.change(screen.getByLabelText('Model Names'), {
+      fireEvent.change(screen.getByLabelText(/Model Names/i), {
         target: { value: 'model-a' },
       });
 

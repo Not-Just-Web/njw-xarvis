@@ -3,14 +3,17 @@
  * Tracks: provider usage, message counts, session metrics
  */
 
-import type { ProviderId } from '../provider-contract/types';
+
+import type { ProviderId } from './provider-contract/types';
 
 export type TelemetryEvent = {
+// Removed duplicate lines
+
   timestamp: number;
   eventType: TelemetryEventType;
   providerId?: ProviderId;
   sessionId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 };
 
 export type TelemetryEventType =
@@ -39,7 +42,11 @@ class Telemetry {
   private stats: TelemetryStats = {
     totalSessions: 0,
     totalMessages: 0,
-    providerUsage: {},
+    providerUsage: {
+      gemini: 0,
+      claude: 0,
+      chatgpt: 0,
+    },
     eventsPerDay: {},
     averageResponseTime: 0,
     errorCount: 0,
@@ -54,7 +61,7 @@ class Telemetry {
   /**
    * Track a telemetry event
    */
-  track(eventType: TelemetryEventType, providerId?: ProviderId, metadata?: Record<string, any>): void {
+  track(eventType: TelemetryEventType, providerId?: ProviderId, metadata?: Record<string, unknown>): void {
     const event: TelemetryEvent = {
       timestamp: Date.now(),
       eventType,
@@ -88,6 +95,7 @@ class Telemetry {
    */
   getProviderRank(): Array<[ProviderId, number]> {
     return Object.entries(this.stats.providerUsage)
+      .map(([k, v]) => [k as ProviderId, v] as [ProviderId, number])
       .sort(([, a], [, b]) => b - a);
   }
 
@@ -114,7 +122,11 @@ class Telemetry {
     this.stats = {
       totalSessions: 0,
       totalMessages: 0,
-      providerUsage: {},
+      providerUsage: {
+        gemini: 0,
+        claude: 0,
+        chatgpt: 0,
+      },
       eventsPerDay: {},
       averageResponseTime: 0,
       errorCount: 0,
@@ -140,7 +152,9 @@ class Telemetry {
     const dateKey = new Date(event.timestamp).toISOString().split('T')[0];
 
     // Track events per day
-    this.stats.eventsPerDay[dateKey] = (this.stats.eventsPerDay[dateKey] || 0) + 1;
+    if (dateKey) {
+      this.stats.eventsPerDay[dateKey] = (this.stats.eventsPerDay[dateKey] || 0) + 1;
+    }
 
     // Track event-specific stats
     switch (event.eventType) {
@@ -161,8 +175,8 @@ class Telemetry {
         break;
 
       case 'message_received':
-        if (event.metadata?.responseTimeMs) {
-          this.updateAverageResponseTime(event.metadata.responseTimeMs);
+        if (event.metadata && typeof (event.metadata as Record<string, unknown>).responseTimeMs === 'number') {
+          this.updateAverageResponseTime((event.metadata as Record<string, unknown>).responseTimeMs as number);
         }
         break;
 

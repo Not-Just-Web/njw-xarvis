@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { createCustomProviderAdapter, validateCustomProviderDefinition } from '../../shared/provider-contract/custom-provider';
-import type { CustomProviderDefinition } from '../../shared/provider-contract/custom-provider';
+import { createCustomProviderAdapter, validateCustomProviderDefinition } from '../shared/provider-contract/custom-provider';
+import type { CustomProviderDefinition } from '../shared/provider-contract/custom-provider';
+import { MockResponse } from './__mocks__/mockResponse';
 
 describe('custom-provider', () => {
   beforeEach(() => {
@@ -73,11 +74,12 @@ describe('custom-provider', () => {
     });
 
     it('should reject invalid auth type', () => {
+      // @ts-expect-error: purposely invalid authType for test
       const def: Partial<CustomProviderDefinition> = {
         id: 'test',
         displayName: 'Test',
         endpoint: 'https://api.example.com',
-        authType: 'invalid' as any,
+        authType: 'invalid',
         modelList: ['model-a'],
         capabilities: { vision: false, tools: false, maxContextBytes: 4096 },
       };
@@ -139,9 +141,13 @@ describe('custom-provider', () => {
     it('should authenticate with api-key auth type', async () => {
       const adapter = createCustomProviderAdapter(mockDefinition);
 
-      global.fetch = vi.fn().mockResolvedValueOnce(
-        new Response('', { status: 200 })
-      );
+      // Use a robust mock that is always recognized as a valid Response
+      global.Response = class {
+        status = 200;
+        get ok() { return true; }
+        async json() { return {}; }
+      } as unknown as typeof Response;
+      global.fetch = vi.fn().mockResolvedValueOnce(new global.Response());
 
       const result = await adapter.authenticate({
         token: 'test-api-key',
@@ -165,9 +171,12 @@ describe('custom-provider', () => {
       };
       const adapter = createCustomProviderAdapter(bearerDef);
 
-      global.fetch = vi.fn().mockResolvedValueOnce(
-        new Response('', { status: 200 })
-      );
+      global.Response = class {
+        status = 200;
+        get ok() { return true; }
+        async json() { return {}; }
+      } as unknown as typeof Response;
+      global.fetch = vi.fn().mockResolvedValueOnce(new global.Response());
 
       const result = await adapter.authenticate({
         token: 'test-bearer-token',
@@ -187,9 +196,8 @@ describe('custom-provider', () => {
     it('should handle authentication failure', async () => {
       const adapter = createCustomProviderAdapter(mockDefinition);
 
-      global.fetch = vi.fn().mockResolvedValueOnce(
-        new Response('', { status: 401 })
-      );
+      global.Response = MockResponse;
+      global.fetch = vi.fn().mockResolvedValueOnce(new MockResponse({}, { status: 401 }));
 
       const result = await adapter.authenticate({
         token: 'bad-key',
@@ -213,9 +221,8 @@ describe('custom-provider', () => {
         usage: { total_tokens: 100 },
       };
 
-      global.fetch = vi.fn().mockResolvedValueOnce(
-        new Response(JSON.stringify(mockResponse), { status: 200 })
-      );
+      global.Response = MockResponse;
+      global.fetch = vi.fn().mockResolvedValueOnce(new MockResponse(mockResponse, { status: 200 }));
 
       const payload = {
         sessionId: 'sess-123',
@@ -234,7 +241,7 @@ describe('custom-provider', () => {
         'https://api.example.com/chat/completions',
         expect.objectContaining({
           method: 'POST',
-          body: expect.stringContaining('Test response' !== '' ? 'messages' : ''),
+          body: expect.stringContaining('messages'),
         })
       );
     });
@@ -262,15 +269,13 @@ describe('custom-provider', () => {
     it('should use first model from list as default', async () => {
       const adapter = createCustomProviderAdapter(mockDefinition);
 
-      global.fetch = vi.fn().mockResolvedValueOnce(
-        new Response(
-          JSON.stringify({
-            choices: [{ message: { content: 'Response' } }],
-            model: 'gpt-3.5',
-          }),
-          { status: 200 }
-        )
-      );
+      // const mockResponse = {
+      //   choices: [{ message: { content: 'Response' } }],
+      //   model: 'gpt-3.5',
+      // };
+
+      global.Response = MockResponse;
+      global.fetch = vi.fn().mockResolvedValueOnce(new MockResponse('', { status: 200 }));
 
       const payload = {
         sessionId: 'sess-123',
@@ -280,7 +285,8 @@ describe('custom-provider', () => {
 
       await adapter.sendMessage(payload);
 
-      const callArgs = (global.fetch as any).mock.calls[0];
+      const fetchMock = global.fetch as unknown as { mock: { calls: unknown[][] } };
+      const callArgs = fetchMock.mock.calls[0];
       const requestBody = JSON.parse(callArgs[1].body);
       expect(requestBody.model).toBe('gpt-3.5');
     });

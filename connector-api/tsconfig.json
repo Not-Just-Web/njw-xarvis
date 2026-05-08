@@ -23,6 +23,10 @@
     "strictBindCallApply": true,
     "strictPropertyInitialization": true
   },
+  "baseUrl": ".",
+  "paths": {
+    "@ai/api/*": ["./src/*"]
+  },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

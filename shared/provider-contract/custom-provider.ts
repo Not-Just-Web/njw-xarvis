@@ -3,7 +3,7 @@
  * Allows users to add their own AI provider without code changes
  */
 
-import type { ProviderAdapter, ProviderAuthConfig, ProviderCapability, ProviderSendPayload, ProviderSendResult } from './types';
+import type { ProviderAdapter, ProviderCapability, ProviderSendPayload, ProviderSendResult } from './types';
 
 export type CustomProviderDefinition = {
   id: string; // Will be prefixed with 'custom:' when registered
@@ -26,7 +26,7 @@ export function createCustomProviderAdapter(definition: CustomProviderDefinition
     displayName: definition.displayName,
     supports: definition.capabilities,
     
-    authenticate: async (config: ProviderAuthConfig): Promise<boolean> => {
+    authenticate: async function(config): Promise<boolean> {
       try {
         // Validate endpoint is reachable and credentials work
         const headers: Record<string, string> = {
@@ -34,11 +34,11 @@ export function createCustomProviderAdapter(definition: CustomProviderDefinition
           ...definition.headers,
         };
 
-        if (config.token && definition.authType === 'api-key') {
+        if (config && config.token && definition.authType === 'api-key') {
           headers['X-API-Key'] = config.token;
-        } else if (config.token && definition.authType === 'bearer') {
+        } else if (config && config.token && definition.authType === 'bearer') {
           headers['Authorization'] = `Bearer ${config.token}`;
-        } else if (config.token && definition.authType === 'basic') {
+        } else if (config && config.token && definition.authType === 'basic') {
           headers['Authorization'] = `Basic ${config.token}`;
         }
 
@@ -56,7 +56,7 @@ export function createCustomProviderAdapter(definition: CustomProviderDefinition
 
     sendMessage: async (payload: ProviderSendPayload): Promise<ProviderSendResult> => {
       try {
-        const authConfig = {}; // Get from extension storage in real implementation
+        // const authConfig = {}; // Get from extension storage in real implementation
         const headers: Record<string, string> = {
           'Content-Type': 'application/json',
           ...definition.headers,

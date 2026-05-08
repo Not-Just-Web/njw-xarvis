@@ -1,273 +1,111 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { describe as describeBlock } from 'vitest';
-import type { ProviderAdapter } from '../../shared/provider-contract/types';
-import type { CustomProviderDefinition } from '../../shared/provider-contract/custom-provider';
+import { describe, it, expect } from 'vitest';
+import { providerRegistry } from '@ai/shared/provider-contract/registry';
+import { createCustomProviderAdapter, validateCustomProviderDefinition } from '@ai/shared/provider-contract/custom-provider';
+import type { ProviderAdapter } from '@ai/shared/provider-contract/types';
 
-// Create a fresh registry for each test
-function createTestRegistry() {
-  const adapters = new Map<string, ProviderAdapter>();
-  const authConfigs = new Map<string, any>();
-  const customProviders = new Map<string, CustomProviderDefinition>();
+describe('ProviderRegistry (dynamic/custom flows)', () => {
+	const customDef = {
+		id: 'dyn-test',
+		displayName: 'Dynamic Test Provider',
+		endpoint: 'https://example.com',
+		authType: 'none',
+		modelList: ['dyn-model'],
+		capabilities: { vision: false, tools: false, maxContextBytes: 12345 },
+		headers: { 'X-Test': '1' }
+	};
 
-  const mockGemini: ProviderAdapter = {
-    id: 'gemini',
-    displayName: 'Google Gemini',
-    supports: { vision: true, tools: true, maxContextBytes: 32000 },
-    authenticate: vi.fn().mockResolvedValue(true),
-    sendMessage: vi.fn().mockResolvedValue({ text: 'Gemini response', model: 'gemini-pro' }),
-  };
+	afterEach(() => {
+		// Clean up custom providers after each test
+		providerRegistry.unregister('custom:dyn-test');
+		providerRegistry.unregister('custom:dyn-test2');
+	});
 
-  const mockClaude: ProviderAdapter = {
-    id: 'claude',
-    displayName: 'Claude',
-    supports: { vision: true, tools: true, maxContextBytes: 100000 },
-    authenticate: vi.fn().mockResolvedValue(true),
-    sendMessage: vi.fn().mockResolvedValue({ text: 'Claude response', model: 'claude-3-sonnet' }),
-  };
+	it('addCustomProvider registers and lists custom provider', () => {
+		const id = providerRegistry.addCustomProvider(customDef);
+		expect(id).toBe('custom:dyn-test');
+		const found = providerRegistry.get(id);
+		expect(found).toBeDefined();
+		expect(found?.displayName).toBe('Dynamic Test Provider');
+		expect(providerRegistry.listCustom().map((p: ProviderAdapter) => p.id)).toContain(id);
+		expect(providerRegistry.listAll().map((p: ProviderAdapter) => p.id)).toContain(id);
+		expect(providerRegistry.getCustomDefinitions().find((d: { id: string }) => d.id === 'dyn-test')).toBeDefined();
+	});
 
-  return {
-    adapters,
-    authConfigs,
-    customProviders,
-    mockGemini,
-    mockClaude,
-  };
-}
+	it('unregister removes provider and cleans up custom definition', () => {
+		const id = providerRegistry.addCustomProvider(customDef);
+		expect(providerRegistry.has(id)).toBe(true);
+		const removed = providerRegistry.unregister(id);
+		expect(removed).toBe(true);
+		expect(providerRegistry.has(id)).toBe(false);
+		expect(providerRegistry.getCustomDefinitions().find(d => d.id === 'dyn-test')).toBeUndefined();
+	});
 
-describe('ProviderRegistry - Dynamic Registration', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+	it('unregister returns false for unknown id', () => {
+		expect(providerRegistry.unregister('custom:does-not-exist')).toBe(false);
+	});
 
-  describe('register / unregister', () => {
-    it('should register a new provider', () => {
-      const { adapters, mockGemini } = createTestRegistry();
+	it('listBuiltin does not include custom providers', () => {
+		providerRegistry.addCustomProvider(customDef);
+		const builtins = providerRegistry.listBuiltin();
+		expect(builtins.find(p => p.id.startsWith('custom:'))).toBeUndefined();
+		expect(builtins.find(p => p.id === 'gemini')).toBeDefined();
+	});
 
-      adapters.set(mockGemini.id, mockGemini);
+	it('listCustom only includes custom providers', () => {
+		providerRegistry.addCustomProvider(customDef);
+		providerRegistry.addCustomProvider({ ...customDef, id: 'dyn-test2', displayName: 'Another' });
+		const customs = providerRegistry.listCustom();
+		expect(customs.length).toBeGreaterThanOrEqual(2);
+		expect(customs.every(p => p.id.startsWith('custom:'))).toBe(true);
+	});
 
-      expect(adapters.has('gemini')).toBe(true);
-      expect(adapters.get('gemini')).toBe(mockGemini);
-    });
+	it('getCustomDefinitions returns all custom definitions', () => {
+		providerRegistry.addCustomProvider(customDef);
+		providerRegistry.addCustomProvider({ ...customDef, id: 'dyn-test2', displayName: 'Another' });
+		const defs = providerRegistry.getCustomDefinitions();
+		expect(defs.find(d => d.id === 'dyn-test')).toBeDefined();
+		expect(defs.find(d => d.id === 'dyn-test2')).toBeDefined();
+	});
 
-    it('should unregister an existing provider', () => {
-      const { adapters, mockGemini } = createTestRegistry();
+	it('validateCustomProviderDefinition enforces rules', () => {
+		expect(validateCustomProviderDefinition({ ...customDef, id: 'bad id' })).toMatch(/Provider ID/);
+		expect(validateCustomProviderDefinition({ ...customDef, displayName: '' })).toMatch(/Display name/);
+		expect(validateCustomProviderDefinition({ ...customDef, endpoint: 'ftp://bad' })).toMatch(/Endpoint/);
+		expect(validateCustomProviderDefinition({ ...customDef, authType: 'invalid' as unknown as 'none' | 'bearer' | 'api-key' | 'oauth' })).toMatch(/Auth type/);
+		expect(validateCustomProviderDefinition({ ...customDef, modelList: [] })).toMatch(/At least one model/);
+		expect(validateCustomProviderDefinition(customDef)).toBeNull();
+	});
 
-      adapters.set(mockGemini.id, mockGemini);
-      expect(adapters.has('gemini')).toBe(true);
+	it('register and get works for direct custom adapter', () => {
+		const adapter: ProviderAdapter = createCustomProviderAdapter(customDef);
+		providerRegistry.register(adapter);
+		expect(providerRegistry.get(adapter.id)).toBeDefined();
+		providerRegistry.unregister(adapter.id);
+	});
 
-      adapters.delete('gemini');
-      expect(adapters.has('gemini')).toBe(false);
-    });
+	it('setAuth/getAuth works for custom provider', () => {
+		const id = providerRegistry.addCustomProvider(customDef);
+		const config: ProviderAuthConfig = { token: 'abc', endpoint: 'https://example.com' };
+		providerRegistry.setAuth(id, config);
+		expect(providerRegistry.getAuth(id)).toEqual(config);
+	});
 
-    it('should remove auth config when unregistering', () => {
-      const { adapters, authConfigs, mockGemini } = createTestRegistry();
+	it('authenticate returns false if no config', async () => {
+		const id = providerRegistry.addCustomProvider(customDef);
+		expect(await providerRegistry.authenticate(id)).toBe(false);
+	});
 
-      adapters.set(mockGemini.id, mockGemini);
-      authConfigs.set('gemini', { token: 'test-token' });
+	it('authenticate returns false for unknown provider', async () => {
+		expect(await providerRegistry.authenticate('custom:does-not-exist')).toBe(false);
+	});
 
-      adapters.delete('gemini');
-      authConfigs.delete('gemini');
-
-      expect(adapters.has('gemini')).toBe(false);
-      expect(authConfigs.has('gemini')).toBe(false);
-    });
-  });
-
-  describe('addCustomProvider', () => {
-    it('should add a custom provider with custom: prefix', () => {
-      const { adapters, customProviders } = createTestRegistry();
-
-      const customDef: CustomProviderDefinition = {
-        id: 'my-provider',
-        displayName: 'My Custom Provider',
-        endpoint: 'https://api.example.com',
-        authType: 'api-key',
-        modelList: ['model-a'],
-        capabilities: { vision: false, tools: false, maxContextBytes: 4096 },
-      };
-
-      customProviders.set('my-provider', customDef);
-
-      expect(customProviders.has('my-provider')).toBe(true);
-      expect(customProviders.get('my-provider')).toEqual(customDef);
-    });
-
-    it('should store custom provider definition', () => {
-      const { customProviders } = createTestRegistry();
-
-      const customDef: CustomProviderDefinition = {
-        id: 'test-provider',
-        displayName: 'Test',
-        endpoint: 'https://test.com',
-        authType: 'bearer',
-        modelList: ['model-1', 'model-2'],
-        capabilities: { vision: true, tools: false, maxContextBytes: 8192 },
-      };
-
-      customProviders.set('test-provider', customDef);
-
-      const stored = customProviders.get('test-provider');
-      expect(stored?.displayName).toBe('Test');
-      expect(stored?.modelList.length).toBe(2);
-    });
-  });
-
-  describe('listBuiltin / listCustom', () => {
-    it('should separate built-in from custom providers', () => {
-      const { adapters, mockGemini, mockClaude } = createTestRegistry();
-
-      adapters.set('gemini', mockGemini);
-      adapters.set('claude', mockClaude);
-      adapters.set('custom:my-provider', {
-        id: 'custom:my-provider',
-        displayName: 'My Provider',
-        supports: { vision: false, tools: false, maxContextBytes: 4096 },
-        authenticate: vi.fn().mockResolvedValue(true),
-        sendMessage: vi.fn().mockResolvedValue({ text: 'Response', model: 'custom' }),
-      } as ProviderAdapter);
-
-      const builtinCount = Array.from(adapters.values())
-        .filter(a => !a.id.startsWith('custom:'))
-        .length;
-      const customCount = Array.from(adapters.values())
-        .filter(a => a.id.startsWith('custom:'))
-        .length;
-
-      expect(builtinCount).toBe(2);
-      expect(customCount).toBe(1);
-    });
-  });
-
-  describe('getCustomDefinitions', () => {
-    it('should return all custom provider definitions', () => {
-      const { customProviders } = createTestRegistry();
-
-      const def1: CustomProviderDefinition = {
-        id: 'provider-1',
-        displayName: 'Provider 1',
-        endpoint: 'https://api1.example.com',
-        authType: 'api-key',
-        modelList: ['model-a'],
-        capabilities: { vision: false, tools: false, maxContextBytes: 4096 },
-      };
-
-      const def2: CustomProviderDefinition = {
-        id: 'provider-2',
-        displayName: 'Provider 2',
-        endpoint: 'https://api2.example.com',
-        authType: 'bearer',
-        modelList: ['model-b'],
-        capabilities: { vision: true, tools: true, maxContextBytes: 8192 },
-      };
-
-      customProviders.set('provider-1', def1);
-      customProviders.set('provider-2', def2);
-
-      const definitions = Array.from(customProviders.values());
-      expect(definitions.length).toBe(2);
-      expect(definitions[0].displayName).toBe('Provider 1');
-      expect(definitions[1].displayName).toBe('Provider 2');
-    });
-
-    it('should return empty array when no custom providers', () => {
-      const { customProviders } = createTestRegistry();
-      const definitions = Array.from(customProviders.values());
-      expect(definitions).toEqual([]);
-    });
-  });
-
-  describe('setAuth / getAuth', () => {
-    it('should set and retrieve auth config for a provider', () => {
-      const { authConfigs } = createTestRegistry();
-
-      authConfigs.set('gemini', { token: 'test-token' });
-
-      const config = authConfigs.get('gemini');
-      expect(config?.token).toBe('test-token');
-    });
-
-    it('should return undefined for provider without auth config', () => {
-      const { authConfigs } = createTestRegistry();
-      const config = authConfigs.get('nonexistent');
-      expect(config).toBeUndefined();
-    });
-
-    it('should allow updating auth config', () => {
-      const { authConfigs } = createTestRegistry();
-
-      authConfigs.set('gemini', { token: 'old-token' });
-      authConfigs.set('gemini', { token: 'new-token' });
-
-      const config = authConfigs.get('gemini');
-      expect(config?.token).toBe('new-token');
-    });
-  });
-
-  describe('get / has / listAll', () => {
-    it('should get a registered provider', () => {
-      const { adapters, mockGemini } = createTestRegistry();
-
-      adapters.set('gemini', mockGemini);
-
-      const provider = adapters.get('gemini');
-      expect(provider).toBe(mockGemini);
-      expect(provider?.displayName).toBe('Google Gemini');
-    });
-
-    it('should check if provider is registered', () => {
-      const { adapters, mockGemini } = createTestRegistry();
-
-      adapters.set('gemini', mockGemini);
-
-      expect(adapters.has('gemini')).toBe(true);
-      expect(adapters.has('nonexistent')).toBe(false);
-    });
-
-    it('should list all registered providers', () => {
-      const { adapters, mockGemini, mockClaude } = createTestRegistry();
-
-      adapters.set('gemini', mockGemini);
-      adapters.set('claude', mockClaude);
-
-      const all = Array.from(adapters.values());
-      expect(all.length).toBe(2);
-      expect(all.map(a => a.id)).toContain('gemini');
-      expect(all.map(a => a.id)).toContain('claude');
-    });
-
-    it('should return empty list when no providers', () => {
-      const { adapters } = createTestRegistry();
-      const all = Array.from(adapters.values());
-      expect(all).toEqual([]);
-    });
-  });
-
-  describe('provider persistence across operations', () => {
-    it('should maintain provider list after auth config changes', () => {
-      const { adapters, authConfigs, mockGemini } = createTestRegistry();
-
-      adapters.set('gemini', mockGemini);
-      authConfigs.set('gemini', { token: 'token1' });
-
-      expect(adapters.has('gemini')).toBe(true);
-
-      authConfigs.set('gemini', { token: 'token2' });
-
-      expect(adapters.has('gemini')).toBe(true);
-      expect(authConfigs.get('gemini')?.token).toBe('token2');
-    });
-
-    it('should handle multiple providers with different auth types', () => {
-      const { adapters, authConfigs, mockGemini, mockClaude } = createTestRegistry();
-
-      adapters.set('gemini', mockGemini);
-      adapters.set('claude', mockClaude);
-
-      authConfigs.set('gemini', { token: 'api-key-123' });
-      authConfigs.set('claude', { token: 'sk-ant-456' });
-
-      expect(authConfigs.get('gemini')?.token).toBe('api-key-123');
-      expect(authConfigs.get('claude')?.token).toBe('sk-ant-456');
-    });
-  });
+	it('authenticate calls adapter.authenticate if config present', async () => {
+		const id = providerRegistry.addCustomProvider(customDef);
+		// Patch the adapter to always return true
+		const adapter = providerRegistry.get(id)!;
+		adapter.authenticate = async () => true;
+		providerRegistry.setAuth(id, { token: 't' });
+		expect(await providerRegistry.authenticate(id)).toBe(true);
+	});
 });
+

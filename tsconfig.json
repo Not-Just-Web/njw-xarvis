@@ -13,7 +13,8 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ai/*": ["./*"]
+      "@ai/*": ["./*"],
+      "@ai/api/*": ["connector-api/src/*"]
     }
   },
   "include": [
