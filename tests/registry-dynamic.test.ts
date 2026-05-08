@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { describe as describeBlock } from 'vitest';
-import type { ProviderAdapter } from '../../shared/provider-contract/types';
-import type { CustomProviderDefinition } from '../../shared/provider-contract/custom-provider';
+import type { ProviderAdapter } from '../shared/provider-contract/types';
+import type { CustomProviderDefinition } from '../shared/provider-contract/custom-provider';
 
 // Create a fresh registry for each test
 function createTestRegistry() {

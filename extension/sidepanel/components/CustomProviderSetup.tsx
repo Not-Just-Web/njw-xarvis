@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import type { CustomProviderDefinition } from '../../shared/provider-contract/custom-provider';
-import { validateCustomProviderDefinition } from '../../shared/provider-contract/custom-provider';
+import type { CustomProviderDefinition } from '../../../shared/provider-contract/custom-provider';
+import { validateCustomProviderDefinition } from '../../../shared/provider-contract/custom-provider';
 import './CustomProviderSetup.css';
 
 interface CustomProviderSetupProps {

@@ -3,7 +3,7 @@
  * Tracks: provider usage, message counts, session metrics
  */
 
-import type { ProviderId } from '../provider-contract/types';
+import type { ProviderId } from './provider-contract/types';
 
 export type TelemetryEvent = {
   timestamp: number;

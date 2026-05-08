@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { createCustomProviderAdapter, validateCustomProviderDefinition } from '../../shared/provider-contract/custom-provider';
-import type { CustomProviderDefinition } from '../../shared/provider-contract/custom-provider';
+import { createCustomProviderAdapter, validateCustomProviderDefinition } from '../shared/provider-contract/custom-provider';
+import type { CustomProviderDefinition } from '../shared/provider-contract/custom-provider';
 
 describe('custom-provider', () => {
   beforeEach(() => {
